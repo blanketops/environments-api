@@ -8,6 +8,8 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 */
 
+// +k8s:openapi-gen=true
+
 package v1alpha1
 
 import (
@@ -17,12 +19,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// Deployment Spec (Kubernetes-facing envelope)
+// BuildTrigger Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// DeploymentSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Deployment contract.
+// BuildTriggerSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps BuildTrigger contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +35,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type DeploymentSpec struct {
+type BuildTriggerSpec struct {
 
-	// Contract is the canonical BlanketOps Deployment specification.
+	// Contract is the canonical BlanketOps BuildTrigger specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +49,16 @@ type DeploymentSpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Deployment Status (Kubernetes-facing envelope)
+// BuildTrigger Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// DeploymentStatus represents observed state owned by the controller.
+// BuildTriggerStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type DeploymentStatus struct {
+type BuildTriggerStatus struct {
 
-	// Contract is the canonical BlanketOps Deployment status.
+	// Contract is the canonical BlanketOps BuildTrigger status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +75,40 @@ type DeploymentStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Deployment CRD
+// BuildTrigger CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// Deployment represents a declarative request to Deployment an artifact.
+// BuildTrigger represents a declarative request to BuildTrigger an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Deployment contract.
-type Deployment struct {
+// transport-agnostic BlanketOps BuildTrigger contract.
+type BuildTrigger struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   DeploymentSpec   `json:"spec,omitempty"`
-	Status DeploymentStatus `json:"status,omitempty"`
+	Spec   BuildTriggerSpec   `json:"spec,omitempty"`
+	Status BuildTriggerStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// DeploymentList
+// BuildTriggerList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// DeploymentList contains a list of Deployment resources.
-type DeploymentList struct {
+// BuildTriggerList contains a list of BuildTrigger resources.
+type BuildTriggerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Deployment `json:"items"`
+	Items           []BuildTrigger `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Deployment{}, &DeploymentList{})
+	SchemeBuilder.Register(&BuildTrigger{}, &BuildTriggerList{})
 }

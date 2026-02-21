@@ -8,6 +8,8 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 */
 
+// +k8s:openapi-gen=true
+
 package v1alpha1
 
 import (
@@ -17,12 +19,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// BuildTrigger Spec (Kubernetes-facing envelope)
+// Build Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// BuildTriggerSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps BuildTrigger contract.
+// BuildSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps Build contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +35,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type BuildTriggerSpec struct {
+type BuildSpec struct {
 
-	// Contract is the canonical BlanketOps BuildTrigger specification.
+	// Contract is the canonical BlanketOps Build specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +49,16 @@ type BuildTriggerSpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// BuildTrigger Status (Kubernetes-facing envelope)
+// Build Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// BuildTriggerStatus represents observed state owned by the controller.
+// BuildStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type BuildTriggerStatus struct {
+type BuildStatus struct {
 
-	// Contract is the canonical BlanketOps BuildTrigger status.
+	// Contract is the canonical BlanketOps Build status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +75,40 @@ type BuildTriggerStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// BuildTrigger CRD
+// Build CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// BuildTrigger represents a declarative request to BuildTrigger an artifact.
+// Build represents a declarative request to build an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps BuildTrigger contract.
-type BuildTrigger struct {
+// transport-agnostic BlanketOps Build contract.
+type Build struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   BuildTriggerSpec   `json:"spec,omitempty"`
-	Status BuildTriggerStatus `json:"status,omitempty"`
+	Spec   BuildSpec   `json:"spec,omitempty"`
+	Status BuildStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// BuildTriggerList
+// BuildList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// BuildTriggerList contains a list of BuildTrigger resources.
-type BuildTriggerList struct {
+// BuildList contains a list of Build resources.
+type BuildList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []BuildTrigger `json:"items"`
+	Items           []Build `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&BuildTrigger{}, &BuildTriggerList{})
+	SchemeBuilder.Register(&Build{}, &BuildList{})
 }

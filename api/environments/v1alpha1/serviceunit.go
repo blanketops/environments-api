@@ -8,6 +8,8 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 */
 
+// +k8s:openapi-gen=true
+
 package v1alpha1
 
 import (
@@ -17,12 +19,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// Route Spec (Kubernetes-facing envelope)
+// ServiceUnit Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// RouteSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Route contract.
+// ServiceUnitSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps ServiceUnit contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +35,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type RouteSpec struct {
+type ServiceUnitSpec struct {
 
-	// Contract is the canonical BlanketOps Route specification.
+	// Contract is the canonical BlanketOps ServiceUnit specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +49,16 @@ type RouteSpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Route Status (Kubernetes-facing envelope)
+// ServiceUnit Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// RouteStatus represents observed state owned by the controller.
+// ServiceUnitStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type RouteStatus struct {
+type ServiceUnitStatus struct {
 
-	// Contract is the canonical BlanketOps Route status.
+	// Contract is the canonical BlanketOps ServiceUnit status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +75,40 @@ type RouteStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Route CRD
+// ServiceUnit CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// Route represents a declarative request to Route an artifact.
+// ServiceUnit represents a declarative request to ServiceUnit an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Route contract.
-type Route struct {
+// transport-agnostic BlanketOps ServiceUnit contract.
+type ServiceUnit struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   RouteSpec   `json:"spec,omitempty"`
-	Status RouteStatus `json:"status,omitempty"`
+	Spec   ServiceUnitSpec   `json:"spec,omitempty"`
+	Status ServiceUnitStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// RouteList
+// ServiceUnitList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// RouteList contains a list of Route resources.
-type RouteList struct {
+// ServiceUnitList contains a list of ServiceUnit resources.
+type ServiceUnitList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Route `json:"items"`
+	Items           []ServiceUnit `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Route{}, &RouteList{})
+	SchemeBuilder.Register(&ServiceUnit{}, &ServiceUnitList{})
 }

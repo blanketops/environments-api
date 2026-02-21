@@ -8,6 +8,8 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 */
 
+// +k8s:openapi-gen=true
+
 package v1alpha1
 
 import (
@@ -17,12 +19,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// GitRepository Spec (Kubernetes-facing envelope)
+// Package Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// GitRepositorySpec is a Kubernetes-native envelope around the canonical
-// BlanketOps GitRepository contract.
+// PackageSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps Package contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +35,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type GitRepositorySpec struct {
+type PackageSpec struct {
 
-	// Contract is the canonical BlanketOps GitRepository specification.
+	// Contract is the canonical BlanketOps Package specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +49,16 @@ type GitRepositorySpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// GitRepository Status (Kubernetes-facing envelope)
+// Package Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// GitRepositoryStatus represents observed state owned by the controller.
+// PackageStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type GitRepositoryStatus struct {
+type PackageStatus struct {
 
-	// Contract is the canonical BlanketOps GitRepository status.
+	// Contract is the canonical BlanketOps Package status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +75,40 @@ type GitRepositoryStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// GitRepository CRD
+// Package CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// GitRepository represents a declarative request to GitRepository an artifact.
+// Package represents a declarative request to Package an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps GitRepository contract.
-type GitRepository struct {
+// transport-agnostic BlanketOps Package contract.
+type Package struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   GitRepositorySpec   `json:"spec,omitempty"`
-	Status GitRepositoryStatus `json:"status,omitempty"`
+	Spec   PackageSpec   `json:"spec,omitempty"`
+	Status PackageStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// GitRepositoryList
+// PackageList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// GitRepositoryList contains a list of GitRepository resources.
-type GitRepositoryList struct {
+// PackageList contains a list of Package resources.
+type PackageList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []GitRepository `json:"items"`
+	Items           []Package `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&GitRepository{}, &GitRepositoryList{})
+	SchemeBuilder.Register(&Package{}, &PackageList{})
 }

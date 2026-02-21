@@ -10,6 +10,8 @@ You may obtain a copy of the License at
 
 package v1alpha1
 
+// +k8s:openapi-gen=true
+
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -17,12 +19,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// Build Spec (Kubernetes-facing envelope)
+// Route Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// BuildSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Build contract.
+// RouteSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps Route contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +35,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type BuildSpec struct {
+type RouteSpec struct {
 
-	// Contract is the canonical BlanketOps Build specification.
+	// Contract is the canonical BlanketOps Route specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +49,16 @@ type BuildSpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Build Status (Kubernetes-facing envelope)
+// Route Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// BuildStatus represents observed state owned by the controller.
+// RouteStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type BuildStatus struct {
+type RouteStatus struct {
 
-	// Contract is the canonical BlanketOps Build status.
+	// Contract is the canonical BlanketOps Route status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +75,40 @@ type BuildStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Build CRD
+// Route CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// Build represents a declarative request to build an artifact.
+// Route represents a declarative request to Route an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Build contract.
-type Build struct {
+// transport-agnostic BlanketOps Route contract.
+type Route struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   BuildSpec   `json:"spec,omitempty"`
-	Status BuildStatus `json:"status,omitempty"`
+	Spec   RouteSpec   `json:"spec,omitempty"`
+	Status RouteStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// BuildList
+// RouteList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// BuildList contains a list of Build resources.
-type BuildList struct {
+// RouteList contains a list of Route resources.
+type RouteList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Build `json:"items"`
+	Items           []Route `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Build{}, &BuildList{})
+	SchemeBuilder.Register(&Route{}, &RouteList{})
 }

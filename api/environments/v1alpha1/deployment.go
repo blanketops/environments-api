@@ -8,6 +8,8 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 */
 
+// +k8s:openapi-gen=true
+
 package v1alpha1
 
 import (
@@ -17,12 +19,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// Environment Spec (Kubernetes-facing envelope)
+// Deployment Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// EnvironmentSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Environment contract.
+// DeploymentSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps Deployment contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +35,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type EnvironmentSpec struct {
+type DeploymentSpec struct {
 
-	// Contract is the canonical BlanketOps Environment specification.
+	// Contract is the canonical BlanketOps Deployment specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +49,16 @@ type EnvironmentSpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Environment Status (Kubernetes-facing envelope)
+// Deployment Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// EnvironmentStatus represents observed state owned by the controller.
+// DeploymentStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type EnvironmentStatus struct {
+type DeploymentStatus struct {
 
-	// Contract is the canonical BlanketOps Environment status.
+	// Contract is the canonical BlanketOps Deployment status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +75,40 @@ type EnvironmentStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Environment CRD
+// Deployment CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// Environment represents a declarative request to Environment an artifact.
+// Deployment represents a declarative request to Deployment an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environment contract.
-type Environment struct {
+// transport-agnostic BlanketOps Deployment contract.
+type Deployment struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   EnvironmentSpec   `json:"spec,omitempty"`
-	Status EnvironmentStatus `json:"status,omitempty"`
+	Spec   DeploymentSpec   `json:"spec,omitempty"`
+	Status DeploymentStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// EnvironmentList
+// DeploymentList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// EnvironmentList contains a list of Environment resources.
-type EnvironmentList struct {
+// DeploymentList contains a list of Deployment resources.
+type DeploymentList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Environment `json:"items"`
+	Items           []Deployment `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Environment{}, &EnvironmentList{})
+	SchemeBuilder.Register(&Deployment{}, &DeploymentList{})
 }

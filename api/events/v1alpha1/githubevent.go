@@ -7,6 +7,7 @@ You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
 */
+// +k8s:openapi-gen=true
 
 package v1alpha1
 
@@ -17,12 +18,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// Package Spec (Kubernetes-facing envelope)
+// GitHubEvent Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// PackageSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Package contract.
+// GitHubEventSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps GitHubEvent contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +34,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type PackageSpec struct {
+type GitHubEventSpec struct {
 
-	// Contract is the canonical BlanketOps Package specification.
+	// Contract is the canonical BlanketOps GitHubEvent specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +48,16 @@ type PackageSpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Package Status (Kubernetes-facing envelope)
+// GitHubEvent Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// PackageStatus represents observed state owned by the controller.
+// GitHubEventStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type PackageStatus struct {
+type GitHubEventStatus struct {
 
-	// Contract is the canonical BlanketOps Package status.
+	// Contract is the canonical BlanketOps GitHubEvent status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +74,40 @@ type PackageStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// Package CRD
+// GitHubEvent CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// Package represents a declarative request to Package an artifact.
+// GitHubEvent represents a declarative request to GitHubEvent an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Package contract.
-type Package struct {
+// transport-agnostic BlanketOps GitHubEvent contract.
+type GitHubEvent struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   PackageSpec   `json:"spec,omitempty"`
-	Status PackageStatus `json:"status,omitempty"`
+	Spec   GitHubEventSpec   `json:"spec,omitempty"`
+	Status GitHubEventStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// PackageList
+// GitHubEventList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// PackageList contains a list of Package resources.
-type PackageList struct {
+// GitHubEventList contains a list of GitHubEvent resources.
+type GitHubEventList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Package `json:"items"`
+	Items           []GitHubEvent `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Package{}, &PackageList{})
+	SchemeBuilder.Register(&GitHubEvent{}, &GitHubEventList{})
 }

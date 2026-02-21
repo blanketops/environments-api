@@ -8,6 +8,8 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 */
 
+// +k8s:openapi-gen=true
+
 package v1alpha1
 
 import (
@@ -17,12 +19,12 @@ import (
 
 //
 // ─────────────────────────────────────────────────────────────
-// ServiceUnit Spec (Kubernetes-facing envelope)
+// Environment Spec (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// ServiceUnitSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps ServiceUnit contract.
+// EnvironmentSpec is a Kubernetes-native envelope around the canonical
+// BlanketOps Environment contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -33,9 +35,9 @@ import (
 // - API server: envelope + metadata
 // - Controller: lifecycle orchestration
 // - Contract layer: semantic meaning
-type ServiceUnitSpec struct {
+type EnvironmentSpec struct {
 
-	// Contract is the canonical BlanketOps ServiceUnit specification.
+	// Contract is the canonical BlanketOps Environment specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -47,16 +49,16 @@ type ServiceUnitSpec struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// ServiceUnit Status (Kubernetes-facing envelope)
+// Environment Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
 
-// ServiceUnitStatus represents observed state owned by the controller.
+// EnvironmentStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
-type ServiceUnitStatus struct {
+type EnvironmentStatus struct {
 
-	// Contract is the canonical BlanketOps ServiceUnit status.
+	// Contract is the canonical BlanketOps Environment status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -73,40 +75,40 @@ type ServiceUnitStatus struct {
 
 //
 // ─────────────────────────────────────────────────────────────
-// ServiceUnit CRD
+// Environment CRD
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// ServiceUnit represents a declarative request to ServiceUnit an artifact.
+// Environment represents a declarative request to Environment an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps ServiceUnit contract.
-type ServiceUnit struct {
+// transport-agnostic BlanketOps Environment contract.
+type Environment struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   ServiceUnitSpec   `json:"spec,omitempty"`
-	Status ServiceUnitStatus `json:"status,omitempty"`
+	Spec   EnvironmentSpec   `json:"spec,omitempty"`
+	Status EnvironmentStatus `json:"status,omitempty"`
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// ServiceUnitList
+// EnvironmentList
 // ─────────────────────────────────────────────────────────────
 //
 
 // +kubebuilder:object:root=true
 
-// ServiceUnitList contains a list of ServiceUnit resources.
-type ServiceUnitList struct {
+// EnvironmentList contains a list of Environment resources.
+type EnvironmentList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []ServiceUnit `json:"items"`
+	Items           []Environment `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&ServiceUnit{}, &ServiceUnitList{})
+	SchemeBuilder.Register(&Environment{}, &EnvironmentList{})
 }
