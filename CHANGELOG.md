@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0] - 2026-04-27
+
+### 🚀 Features
+
+- *(gove)* Add license headers
+- *(gov)* Add license to all files
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Update changelog for v0.0.9
+
+### Bugfix
+
+- *(workflows)* Add release workflows
+- *(techdebt)* Remove license header
+
+### Release
+
+- Merge release/v0.1.0 into main
+
 ## [0.0.9] - 2026-04-05
 
 ### Bugfix
