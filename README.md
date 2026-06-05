@@ -44,6 +44,7 @@ Currently supported API groups:
 
 - `environments.blanketops.dev/v1alpha1`
 - `events.blanketops.dev/v1alpha1`
+- `networks.blanketops.dev/v1alpha1`
 - `sources.blanketops.dev/v1alpha1`
 
 All APIs are currently **alpha** and may change in backward-incompatible ways
