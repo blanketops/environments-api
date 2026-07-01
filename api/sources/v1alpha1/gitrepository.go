@@ -14,7 +14,6 @@ limitations under the License.
 */
 
 // +k8s:openapi-gen=true
-
 package v1alpha1
 
 import (
