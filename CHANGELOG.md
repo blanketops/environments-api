@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.7] - 2026-08-18
+
+### ⚙️ Miscellaneous Tasks
+
+- Sync develop with main after release/v0.2.6
+- *(PROJECT)* Lowercase repo/path to match go.mod module path
+- Use GitHub App token instead of GH_PAT for release workflows
+- Use GitHub App token instead of GH_PAT for release workflows
+
+### Merge
+
+- Bring main into develop (main wins on conflict)
+
+### Release
+
+- Merge release/v0.2.7 into main
+
+## [0.2.6] - 2026-07-12
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Update changelog for v0.2.5
+- Sync develop with main after release/v0.2.5
+- *(go.mod)* Use lowercase module path github.com/blanketops/environments-api
+
 ## [0.2.5] - 2026-07-12
 
 ### 🐛 Bug Fixes
