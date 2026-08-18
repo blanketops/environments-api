@@ -11,6 +11,22 @@ build, event, and source APIs used by BlanketOps components.
 
 ---
 
+## Consuming This Module (Private Repo)
+
+This repository is currently **private** (expected for a week or two). Until
+it's public, `go get`/`go mod download` needs to skip the public module proxy
+and checksum database for this path, and authenticate via git:
+
+```sh
+export GOPRIVATE=github.com/blanketops/*
+git config --global url."git@github.com:".insteadOf "https://github.com/"
+```
+
+Requires an SSH key registered with GitHub and access to the `blanketops`
+org. Drop both once the repo goes public.
+
+---
+
 ## What This Repository Is
 
 This repository:
