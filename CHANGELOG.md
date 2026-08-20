@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.9] - 2026-08-20
+
+### 🐛 Bug Fixes
+
+- *(templates)* Move issue templates to the path GitHub actually reads
+- *(templates)* Remove Contract Change issue type -- doesn't belong here
+
+### 📚 Documentation
+
+- Add generated code docs and code-docs CI job
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Update changelog for v0.2.8
+- *(ci)* Bump actions/upload-artifact from 4 to 7
+- *(ci)* Bump actions/checkout from 4 to 7
+- *(ci)* Bump actions/create-github-app-token from 2 to 3
+- *(ci)* Bump softprops/action-gh-release from 2 to 3
+- Bring issue/PR template fixes into main
+
+### Release
+
+- Merge release/v0.2.9 into main
+
 ## [0.2.8] - 2026-08-20
 
 ### 📚 Documentation
