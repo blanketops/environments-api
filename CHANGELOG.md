@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.8] - 2026-08-20
+
+### 📚 Documentation
+
+- Remove stale private-repo section from README
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Update changelog for v0.2.7
+- Sync develop with main after release/v0.2.7
+- Add dependabot.yml (gomod, github-actions)
+- Bring dependabot.yml into main (Dependabot reads config from default branch)
+
 ## [0.2.7] - 2026-08-18
 
 ### ⚙️ Miscellaneous Tasks
