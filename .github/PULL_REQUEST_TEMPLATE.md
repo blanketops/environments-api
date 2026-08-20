@@ -1,4 +1,3 @@
-
 ## What
 
 <!-- One or two sentences. What does this PR change? -->
@@ -16,7 +15,6 @@
 * [ ] `sources`
 * [ ] `networks`
 * [ ] `common`
-* [ ] Application / domain layer (no API surface change)
 * [ ] CI / tooling / docs
 
 ## API impact
@@ -30,14 +28,10 @@
 
 ## Checklist
 
-* [ ] `mage verify` passes locally
-* [ ] `buf breaking` reviewed (failures justified above if pre-v1)
-* [ ] Panic-free resolution — no `panic()` calls in resolution or domain layers
-* [ ] Import paths use `gen/go/blanketops/...` for contract types
+* [ ] `mage verify` passes locally (fmt, vet, deepcopy generate, CRD manifests)
+* [ ] Generated deepcopy/CRD manifests committed and in sync with the Go types
+* [ ] No reconciliation logic added — this repo owns schemas and types only
 * [ ] BlanketOps labels present where required (`environments.blanketops.dev/*`)
-* [ ] Conditions written via `core.SetCondition` at each domain pipeline stage
-* [ ] Events emitted via `core.EventRecorder` for terminal outcomes
-* [ ] ESP-0001 updated if contract semantics changed
 * [ ] Commit messages follow Conventional Commits
 
 ## Notes for reviewer
