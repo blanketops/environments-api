@@ -14,7 +14,7 @@ Code generated manually. DO NOT EDIT via generator.
 
 
 <a name="GetOpenAPIDefinitions"></a>
-## func [GetOpenAPIDefinitions](<https://github.com/blanketops/environments-api/blob/main/pkg/generated/openapi/generated.openapi.go#L24>)
+## func GetOpenAPIDefinitions
 
 ```go
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition
