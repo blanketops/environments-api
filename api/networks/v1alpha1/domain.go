@@ -97,9 +97,6 @@ type DomainStatus struct {
 // Domain owns the mapping and cert issuing lifecycle for an application host.
 // This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Domain contract.
 // Domain represents a declarative request to Domain an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Domain contract.
 type Domain struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

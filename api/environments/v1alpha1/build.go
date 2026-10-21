@@ -93,10 +93,9 @@ type BuildStatus struct {
 // +kubebuilder:printcolumn:name="Revision",type="string",JSONPath=".spec.contract.source.revision",description="Git commit, branch or tag",priority=1
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the build status was updated",priority=1
 
+// Build owns the lifecycle of a build operation, including source retrieval, image building, and artifact publishing.
 // Build represents a declarative request to build an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environments Build contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Build contract.
 type Build struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

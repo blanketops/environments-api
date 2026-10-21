@@ -28,7 +28,7 @@ import (
 //
 
 // GitRepositorySpec is a Kubernetes-native envelope around the canonical
-// BlanketOps GitRepository contract.
+// BlanketOps Environments GitRepository contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type GitRepositorySpec struct {
 
-	// Contract is the canonical BlanketOps GitRepository specification.
+	// Contract is the canonical BlanketOps Environments GitRepository specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -60,7 +60,7 @@ type GitRepositorySpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type GitRepositoryStatus struct {
 
-	// Contract is the canonical BlanketOps GitRepository status.
+	// Contract is the canonical BlanketOps Environments GitRepository status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -92,11 +92,11 @@ type GitRepositoryStatus struct {
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the GitRepository status was updated",priority=1
 
 // GitRepository declares an external source system observed by the delivery controller.
-// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps GitRepository contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments GitRepository contract.
 // GitRepository represents a declarative request to GitRepository an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps GitRepository contract.
+// transport-agnostic BlanketOps Environments GitRepository contract.
 type GitRepository struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

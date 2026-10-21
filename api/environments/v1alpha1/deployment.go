@@ -94,10 +94,9 @@ type DeploymentStatus struct {
 // +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Human readable diagnostics details",priority=1
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the deployment status was updated",priority=1
 
+// Deployment owns the lifecycle of a deployment operation, including manifest generation, GitOps repo commit, and cluster rollout.
 // Deployment represents a declarative request to Deployment an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environments Deployment contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Deployment contract.
 type Deployment struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

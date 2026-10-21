@@ -28,7 +28,7 @@ import (
 //
 
 // EnvironmentSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Environment contract.
+// BlanketOps Environments Environment contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type EnvironmentSpec struct {
 
-	// Contract is the canonical BlanketOps Environment specification.
+	// Contract is the canonical BlanketOps Environments Environment specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type EnvironmentSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type EnvironmentStatus struct {
 
-	// Contract is the canonical BlanketOps Environment status.
+	// Contract is the canonical BlanketOps Environments Environment status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -98,7 +98,7 @@ type EnvironmentStatus struct {
 // Environment represents a declarative request to Environment an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environment contract.
+// transport-agnostic BlanketOps Environments Environment contract.
 type Environment struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
