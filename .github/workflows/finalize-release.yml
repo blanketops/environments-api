@@ -8,10 +8,16 @@
 # Verified commits:
 #   Nothing here is committed or pushed with git. A commit made with
 #   `git commit` in a workflow is never verified on GitHub, and a branch that
-#   requires verified signatures refuses it. Merges go through the merges
-#   API (hack/api-merge.sh) and file changes through createCommitOnBranch
-#   (hack/api-commit.sh); GitHub makes and signs those commits itself. The
-#   tag is created through the API too.
+#   requires verified signatures refuses it. GitHub makes and signs every
+#   commit below itself, and the tag is created through the API too.
+#
+# Pull requests into main:
+#   main's `protect` ruleset takes changes only through a pull request, and
+#   the App is not a bypass actor. The release branch is merged through its
+#   pull request (hack/api-merge-pr.sh, a merge commit), and the changelog
+#   lands through a pull request of its own (hack/api-pr.sh, squash-merged).
+#   develop's ruleset lets the App merge main back in directly
+#   (hack/api-merge.sh).
 #
 # Tag placement:
 #   The tag is created last on main, after the changelog commit. It used to
@@ -59,12 +65,13 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
 
       # The scripts come from the release branch, which is what is being
-      # released. They are copied out of the checkout because the steps below
-      # move it to main, and main does not carry them until this merge lands.
+      # released, or from main for one that predates them. They are copied out
+      # of the checkout because the steps below move it.
       - name: Stage the API helpers
         run: |
-          for script in api-commit.sh api-merge.sh; do
-            git show "origin/release/${VERSION}:hack/${script}" > "${RUNNER_TEMP}/${script}"
+          for script in api-commit.sh api-merge.sh api-merge-pr.sh api-pr.sh; do
+            git show "origin/release/${VERSION}:hack/${script}" > "${RUNNER_TEMP}/${script}" 2>/dev/null \
+              || git show "origin/main:hack/${script}" > "${RUNNER_TEMP}/${script}"
             chmod +x "${RUNNER_TEMP}/${script}"
           done
 
@@ -72,28 +79,31 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          "${RUNNER_TEMP}/api-merge.sh" main "release/${VERSION}" \
+          "${RUNNER_TEMP}/api-merge-pr.sh" main "release/${VERSION}" \
             "release: merge release/${VERSION} into main"
 
-      - name: Install git-cliff
-        run: |
-          curl -L https://github.com/orhun/git-cliff/releases/download/v2.4.0/git-cliff-2.4.0-x86_64-unknown-linux-gnu.tar.gz -o cliff.tar.gz
-          tar -xzf cliff.tar.gz
-          sudo mv git-cliff-2.4.0/git-cliff /usr/local/bin/git-cliff
+      # git-cliff is baked into the runner image (zenith-runner-toolchain).
+      - name: git-cliff version
+        run: git-cliff --version
 
       # --tag renders the commits since the last release under this version:
       # the tag itself is only created after this file is committed.
       - name: Generate CHANGELOG.md
         run: git-cliff --config .cliff.toml --tag "${VERSION}" --output CHANGELOG.md
 
+      # Its own pull request into main, squash-merged. No skip marker in the
+      # message: the tag goes on this commit and must start release.yml.
       - name: Commit changelog
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          "${RUNNER_TEMP}/api-commit.sh" main \
+          "${RUNNER_TEMP}/api-pr.sh" main "release/${VERSION}-changelog" \
             "chore(release): update changelog for ${VERSION}" CHANGELOG.md
+          git fetch --quiet origin main
+          git checkout --quiet --detach origin/main
 
-      # On the changelog commit: a tag on a [skip ci] commit starts no workflow.
+      # On main's head, the changelog commit: a tag on a commit whose message
+      # carries the skip marker starts no workflow.
       - name: Tag release
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
