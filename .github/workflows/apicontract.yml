@@ -28,6 +28,7 @@ jobs:
       - name: Upload CRDs
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v7
+        continue-on-error: true
         with:
           name: crds-${{ github.ref_name }}
           path: config/crd/bases
