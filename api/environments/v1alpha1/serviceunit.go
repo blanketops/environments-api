@@ -85,7 +85,16 @@ type ServiceUnitStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The current deployment phase of the workload"
+// +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.contract.type",description="The image sourcing strategy (STATIC or BUILD)"
+// +kubebuilder:printcolumn:name="Replicas",type="integer",JSONPath=".spec.contract.size",description="The desired target replica count"
+// +kubebuilder:printcolumn:name="Resolved-Image",type="string",JSONPath=".status.contract.resolvedImage",description="The active image reference used at runtime"
+// +kubebuilder:printcolumn:name="Runtime",type="string",JSONPath=".status.contract.runtime",description="The materialized backend runtime container",priority=1
+// +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Aggregated failure diagnostics details",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the service unit status was updated",priority=1
 
+// ServiceUnit represents a single declarative deployable workload layout.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps ServiceUnit contract.
 // ServiceUnit represents a declarative request to ServiceUnit an artifact.
 //
 // This resource is a Kubernetes-native envelope around a

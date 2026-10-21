@@ -85,7 +85,16 @@ type DomainStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The overall lifecycle phase of the domain mapping"
+// +kubebuilder:printcolumn:name="Host",type="string",JSONPath=".spec.contract.host",description="The fully qualified domain name target"
+// +kubebuilder:printcolumn:name="Strategy",type="string",JSONPath=".spec.contract.tlsStrategy",description="Provisioning path path (platform vs custom)"
+// +kubebuilder:printcolumn:name="Cert-Issued",type="boolean",JSONPath=".status.contract.certIssued",description="True if a valid TLS certificate exists for this host"
+// +kubebuilder:printcolumn:name="mTLS",type="boolean",JSONPath=".spec.contract.mtls.enforced",description="True if inter-service proxy sidecar validation is forced",priority=1
+// +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Human readable diagnostics detail text string",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the Domain status was updated",priority=1
 
+// Domain owns the mapping and cert issuing lifecycle for an application host.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Domain contract.
 // Domain represents a declarative request to Domain an artifact.
 //
 // This resource is a Kubernetes-native envelope around a

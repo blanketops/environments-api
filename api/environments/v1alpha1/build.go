@@ -85,7 +85,12 @@ type BuildStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="Current lifecycle phase of the build"
+// +kubebuilder:printcolumn:name="Strategy",type="string",JSONPath=".spec.contract.strategy.name",description="Shipwright strategy used"
+// +kubebuilder:printcolumn:name="Target-Image",type="string",JSONPath=".spec.contract.image",description="Target repository and tag"
+// +kubebuilder:printcolumn:name="Execution-Ref",type="string",JSONPath=".status.contract.executionRef",description="Active Shipwright BuildRun reference",priority=1
+// +kubebuilder:printcolumn:name="Revision",type="string",JSONPath=".spec.contract.source.revision",description="Git commit, branch or tag",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the build status was updated",priority=1
 // Build represents a declarative request to build an artifact.
 //
 // This resource is a Kubernetes-native envelope around a

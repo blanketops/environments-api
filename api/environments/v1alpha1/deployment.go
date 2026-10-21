@@ -96,7 +96,12 @@ type DeploymentStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The execution phase of the overall rollout"
+// +kubebuilder:printcolumn:name="Runtime",type="string",JSONPath=".status.contract.runtime",description="The backend workload runtime being used"
+// +kubebuilder:printcolumn:name="Strategy",type="string",JSONPath=".status.contract.strategy",description="Workload deployment strategy"
+// +kubebuilder:printcolumn:name="GitOps-Path",type="string",JSONPath=".spec.contract.manifestsRepo.path",description="The target folder path inside the GitOps repo",priority=1
+// +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Human readable diagnostics details",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the deployment status was updated",priority=1
 // Deployment represents a declarative request to Deployment an artifact.
 //
 // This resource is a Kubernetes-native envelope around a

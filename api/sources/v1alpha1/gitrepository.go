@@ -85,6 +85,14 @@ type GitRepositoryStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.contract.ready",description="True if provider webhooks are registered and active"
+// +kubebuilder:printcolumn:name="Provider",type="string",JSONPath=".spec.contract.provider",description="The code hosting platform (e.g., GITHUB, GITLAB)"
+// +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.contract.repository.name",description="The target repository identifier"
+// +kubebuilder:printcolumn:name="Owner",type="string",JSONPath=".spec.contract.repository.owner",description="The user or organization account on the provider"
+// +kubebuilder:printcolumn:name="Reason",type="string",JSONPath=".status.contract.reason",description="Deregistration or connection failure summary detail",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the GitRepository status was updated",priority=1
+
+// GitRepository declares an external source system observed by the delivery controller.
 
 // GitRepository represents a declarative request to GitRepository an artifact.
 //

@@ -85,7 +85,17 @@ type RouteStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The operational lifecycle phase of the network path"
+// +kubebuilder:printcolumn:name="Host",type="string",JSONPath=".spec.contract.host",description="The target domain address to match"
+// +kubebuilder:printcolumn:name="Path",type="string",JSONPath=".spec.contract.path",description="The HTTP path prefix endpoint rule matching string"
+// +kubebuilder:printcolumn:name="Service-Unit",type="string",JSONPath=".spec.contract.serviceUnitRef.name",description="The underlying target service unit CR being exposed"
+// +kubebuilder:printcolumn:name="Enabled",type="boolean",JSONPath=".spec.contract.enabled",description="Whether this network trajectory rule is actively serving traffic"
+// +kubebuilder:printcolumn:name="Endpoint",type="string",JSONPath=".status.contract.resolvedAddress",description="The load balancer host target address string output",priority=1
+// +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Failure diagnosis log description detailed summary",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the Route status was updated",priority=1
 
+// Route declares an application ingress trajectory mapping pattern ruleset.s
+//
 // Route represents a declarative request to Route an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
