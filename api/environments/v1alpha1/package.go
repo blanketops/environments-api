@@ -95,11 +95,8 @@ type PackageStatus struct {
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the package status was updated",priority=1
 
 // Package represents a versioned delivery artifact tracking manifest state.
-//
 // Package represents a declarative request to Package an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environments Package contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Package contract.
 type Package struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

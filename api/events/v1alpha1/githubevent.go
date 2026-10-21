@@ -28,7 +28,7 @@ import (
 //
 
 // GitHubEventSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps GitHubEvent contract.
+// BlanketOps Environments GitHubEvent contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type GitHubEventSpec struct {
 
-	// Contract is the canonical BlanketOps GitHubEvent specification.
+	// Contract is the canonical BlanketOps Environments GitHubEvent specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type GitHubEventSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type GitHubEventStatus struct {
 
-	// Contract is the canonical BlanketOps GitHubEvent status.
+	// Contract is the canonical BlanketOps Environments GitHubEvent status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -96,11 +96,8 @@ type GitHubEventStatus struct {
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the GitHubEvent status was updated",priority=1
 
 // GitHubEvent represents an immutable log of an external Git platform action.
-// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps GitHubEvent contract.
 // GitHubEvent represents a declarative request to GitHubEvent an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps GitHubEvent contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments GitHubEvent contract.
 type GitHubEvent struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

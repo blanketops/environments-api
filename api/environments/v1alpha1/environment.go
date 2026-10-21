@@ -96,9 +96,7 @@ type EnvironmentStatus struct {
 
 // Environment tracks a versioned, isolated execution context where applications run.
 // Environment represents a declarative request to Environment an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environments Environment contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Environment contract.
 type Environment struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

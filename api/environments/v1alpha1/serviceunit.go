@@ -95,11 +95,8 @@ type ServiceUnitStatus struct {
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the service unit status was updated",priority=1
 
 // ServiceUnit represents a single declarative deployable workload layout.
+// ServiceUnit represents a declarative request to serviceunit an artifact.
 // This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps  Environments ServiceUnit contract.
-// ServiceUnit represents a declarative request to ServiceUnit an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environments ServiceUnit contract.
 type ServiceUnit struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

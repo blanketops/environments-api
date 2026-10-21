@@ -28,7 +28,7 @@ import (
 //
 
 // RouteSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Route contract.
+// BlanketOps Environments Route contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type RouteSpec struct {
 
-	// Contract is the canonical BlanketOps Route specification.
+	// Contract is the canonical BlanketOps Environments Route specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type RouteSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type RouteStatus struct {
 
-	// Contract is the canonical BlanketOps Route status.
+	// Contract is the canonical BlanketOps Environments Route status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -95,12 +95,9 @@ type RouteStatus struct {
 // +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Failure diagnosis log description detailed summary",priority=1
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the Route status was updated",priority=1
 
-// Route declares an application ingress trajectory mapping pattern ruleset.s
-//
+// Route declares an application ingress trajectory mapping pattern ruleset.
 // Route represents a declarative request to Route an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Route contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Route contract.
 type Route struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
