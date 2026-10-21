@@ -28,7 +28,7 @@ import (
 //
 
 // GitRepositorySpec is a Kubernetes-native envelope around the canonical
-// BlanketOps GitRepository contract.
+// BlanketOps Environments Environments GitRepository contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type GitRepositorySpec struct {
 
-	// Contract is the canonical BlanketOps GitRepository specification.
+	// Contract is the canonical BlanketOps Environments Environments GitRepository specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -51,18 +51,16 @@ type GitRepositorySpec struct {
 	Contract runtime.RawExtension `json:"contract"`
 }
 
-//
 // ─────────────────────────────────────────────────────────────
 // GitRepository Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
-
 // GitRepositoryStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
 type GitRepositoryStatus struct {
 
-	// Contract is the canonical BlanketOps GitRepository status.
+	// Contract is the canonical BlanketOps Environments Environments GitRepository status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -86,16 +84,21 @@ type GitRepositoryStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
+// +kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.contract.ready",description="True if provider webhooks are registered and active"
+// +kubebuilder:printcolumn:name="Provider",type="string",JSONPath=".spec.contract.provider",description="The code hosting platform (e.g., GITHUB, GITLAB)"
+// +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.contract.repository.name",description="The target repository identifier"
+// +kubebuilder:printcolumn:name="Owner",type="string",JSONPath=".spec.contract.repository.owner",description="The user or organization account on the provider"
+// +kubebuilder:printcolumn:name="Reason",type="string",JSONPath=".status.contract.reason",description="Deregistration or connection failure summary detail",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the GitRepository status was updated",priority=1
+
+// GitRepository declares an external source system observed by the delivery controller.
 // GitRepository represents a declarative request to GitRepository an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps GitRepository contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Environments GitRepository contract.
 type GitRepository struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   GitRepositorySpec   `json:"spec,omitempty"`
-	Status GitRepositoryStatus `json:"status,omitempty"`
+	Spec              GitRepositorySpec   `json:"spec,omitempty"`
+	Status            GitRepositoryStatus `json:"status,omitempty"`
 }
 
 //

@@ -28,7 +28,7 @@ import (
 //
 
 // EnvironmentSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Environment contract.
+// BlanketOps Environments Environment contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type EnvironmentSpec struct {
 
-	// Contract is the canonical BlanketOps Environment specification.
+	// Contract is the canonical BlanketOps Environments Environment specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type EnvironmentSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type EnvironmentStatus struct {
 
-	// Contract is the canonical BlanketOps Environment status.
+	// Contract is the canonical BlanketOps Environments Environment status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -86,10 +86,17 @@ type EnvironmentStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The aggregate health phase of the delivery chain"
+// +kubebuilder:printcolumn:name="Application",type="string",JSONPath=".spec.contract.applicationName",description="The human-readable application identifier"
+// +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.contract.environmentType",description="Classification of the environment (e.g., Staging, Production)"
+// +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.contract.version",description="The current semantic version deployed"
+// +kubebuilder:printcolumn:name="Branch",type="string",JSONPath=".spec.contract.branch",description="The source Git branch tracked by this environment",priority=1
+// +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Aggregated failure diagnostics summary",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the environment status was updated",priority=1
+
+// Environment tracks a versioned, isolated execution context where applications run.
 // Environment represents a declarative request to Environment an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Environment contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Environment contract.
 type Environment struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

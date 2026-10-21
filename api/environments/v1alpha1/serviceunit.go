@@ -28,7 +28,7 @@ import (
 //
 
 // ServiceUnitSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps ServiceUnit contract.
+// BlanketOps Environments ServiceUnit contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type ServiceUnitSpec struct {
 
-	// Contract is the canonical BlanketOps ServiceUnit specification.
+	// Contract is the canonical BlanketOps Environments ServiceUnit specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type ServiceUnitSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type ServiceUnitStatus struct {
 
-	// Contract is the canonical BlanketOps ServiceUnit status.
+	// Contract is the canonical BlanketOps Environments ServiceUnit status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -86,10 +86,17 @@ type ServiceUnitStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// ServiceUnit represents a declarative request to ServiceUnit an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps ServiceUnit contract.
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The current deployment phase of the workload"
+// +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.contract.type",description="The image sourcing strategy (STATIC or BUILD)"
+// +kubebuilder:printcolumn:name="Replicas",type="integer",JSONPath=".spec.contract.size",description="The desired target replica count"
+// +kubebuilder:printcolumn:name="Resolved-Image",type="string",JSONPath=".status.contract.resolvedImage",description="The active image reference used at runtime"
+// +kubebuilder:printcolumn:name="Runtime",type="string",JSONPath=".status.contract.runtime",description="The materialized backend runtime container",priority=1
+// +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Aggregated failure diagnostics details",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the service unit status was updated",priority=1
+
+// ServiceUnit represents a single declarative deployable workload layout.
+// ServiceUnit represents a declarative request to serviceunit an artifact.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps  Environments ServiceUnit contract.
 type ServiceUnit struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

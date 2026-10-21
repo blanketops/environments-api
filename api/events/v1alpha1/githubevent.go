@@ -28,7 +28,7 @@ import (
 //
 
 // GitHubEventSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps GitHubEvent contract.
+// BlanketOps Environments GitHubEvent contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type GitHubEventSpec struct {
 
-	// Contract is the canonical BlanketOps GitHubEvent specification.
+	// Contract is the canonical BlanketOps Environments GitHubEvent specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type GitHubEventSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type GitHubEventStatus struct {
 
-	// Contract is the canonical BlanketOps GitHubEvent status.
+	// Contract is the canonical BlanketOps Environments GitHubEvent status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -86,16 +86,23 @@ type GitHubEventStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
+// +kubebuilder:printcolumn:name="Event-Type",type="string",JSONPath=".spec.contract.eventType",description="The provider event action (e.g., PUSH, PULL_REQUEST)"
+// +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.contract.repository",description="The source repository origin owner/name"
+// +kubebuilder:printcolumn:name="Accepted",type="boolean",JSONPath=".status.contract.accepted",description="True if webhook signature validation passed"
+// +kubebuilder:printcolumn:name="Triggered",type="boolean",JSONPath=".status.contract.triggered",description="True if an automation build trigger kicked off"
+// +kubebuilder:printcolumn:name="Commit-SHA",type="string",JSONPath=".spec.contract.commitSha",description="The target commit hex identifier",priority=1
+// +kubebuilder:printcolumn:name="Triggered-Ref",type="string",JSONPath=".status.contract.triggeredRef",description="Reference to the downstream resource invoked",priority=1
+// +kubebuilder:printcolumn:name="Reason",type="string",JSONPath=".status.contract.reason",description="Rejection or execution bypass message detail",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the GitHubEvent status was updated",priority=1
+
+// GitHubEvent represents an immutable log of an external Git platform action.
 // GitHubEvent represents a declarative request to GitHubEvent an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps GitHubEvent contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments GitHubEvent contract.
 type GitHubEvent struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   GitHubEventSpec   `json:"spec,omitempty"`
-	Status GitHubEventStatus `json:"status,omitempty"`
+	Spec              GitHubEventSpec   `json:"spec,omitempty"`
+	Status            GitHubEventStatus `json:"status,omitempty"`
 }
 
 //
