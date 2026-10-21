@@ -85,6 +85,7 @@ type GitHubEventStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+
 // +kubebuilder:printcolumn:name="Event-Type",type="string",JSONPath=".spec.contract.eventType",description="The provider event action (e.g., PUSH, PULL_REQUEST)"
 // +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.contract.repository",description="The source repository origin owner/name"
 // +kubebuilder:printcolumn:name="Accepted",type="boolean",JSONPath=".status.contract.accepted",description="True if webhook signature validation passed"
@@ -93,8 +94,9 @@ type GitHubEventStatus struct {
 // +kubebuilder:printcolumn:name="Triggered-Ref",type="string",JSONPath=".status.contract.triggeredRef",description="Reference to the downstream resource invoked",priority=1
 // +kubebuilder:printcolumn:name="Reason",type="string",JSONPath=".status.contract.reason",description="Rejection or execution bypass message detail",priority=1
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the GitHubEvent status was updated",priority=1
-// GitHubEvent represents an immutable log of an external Git platform action.
 
+// GitHubEvent represents an immutable log of an external Git platform action.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps GitHubEvent contract.
 // GitHubEvent represents a declarative request to GitHubEvent an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
@@ -102,9 +104,8 @@ type GitHubEventStatus struct {
 type GitHubEvent struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   GitHubEventSpec   `json:"spec,omitempty"`
-	Status GitHubEventStatus `json:"status,omitempty"`
+	Spec              GitHubEventSpec   `json:"spec,omitempty"`
+	Status            GitHubEventStatus `json:"status,omitempty"`
 }
 
 //

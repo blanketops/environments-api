@@ -28,7 +28,7 @@ import (
 //
 
 // BuildSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Build contract.
+// BlanketOps Environments Build contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type BuildSpec struct {
 
-	// Contract is the canonical BlanketOps Build specification.
+	// Contract is the canonical BlanketOps Environments Build specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type BuildSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type BuildStatus struct {
 
-	// Contract is the canonical BlanketOps Build status.
+	// Contract is the canonical BlanketOps Environments Build status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -85,22 +85,23 @@ type BuildStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="Current lifecycle phase of the build"
 // +kubebuilder:printcolumn:name="Strategy",type="string",JSONPath=".spec.contract.strategy.name",description="Shipwright strategy used"
 // +kubebuilder:printcolumn:name="Target-Image",type="string",JSONPath=".spec.contract.image",description="Target repository and tag"
 // +kubebuilder:printcolumn:name="Execution-Ref",type="string",JSONPath=".status.contract.executionRef",description="Active Shipwright BuildRun reference",priority=1
 // +kubebuilder:printcolumn:name="Revision",type="string",JSONPath=".spec.contract.source.revision",description="Git commit, branch or tag",priority=1
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the build status was updated",priority=1
+
 // Build represents a declarative request to build an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Build contract.
+// transport-agnostic BlanketOps Environments Build contract.
 type Build struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   BuildSpec   `json:"spec,omitempty"`
-	Status BuildStatus `json:"status,omitempty"`
+	Spec              BuildSpec   `json:"spec,omitempty"`
+	Status            BuildStatus `json:"status,omitempty"`
 }
 
 //

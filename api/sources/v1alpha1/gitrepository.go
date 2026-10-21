@@ -51,12 +51,10 @@ type GitRepositorySpec struct {
 	Contract runtime.RawExtension `json:"contract"`
 }
 
-//
 // ─────────────────────────────────────────────────────────────
 // GitRepository Status (Kubernetes-facing envelope)
 // ─────────────────────────────────────────────────────────────
 //
-
 // GitRepositoryStatus represents observed state owned by the controller.
 //
 // This mirrors the contract status but remains opaque to Kubernetes.
@@ -85,6 +83,7 @@ type GitRepositoryStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+
 // +kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.contract.ready",description="True if provider webhooks are registered and active"
 // +kubebuilder:printcolumn:name="Provider",type="string",JSONPath=".spec.contract.provider",description="The code hosting platform (e.g., GITHUB, GITLAB)"
 // +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.contract.repository.name",description="The target repository identifier"
@@ -93,7 +92,7 @@ type GitRepositoryStatus struct {
 // +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the GitRepository status was updated",priority=1
 
 // GitRepository declares an external source system observed by the delivery controller.
-
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps GitRepository contract.
 // GitRepository represents a declarative request to GitRepository an artifact.
 //
 // This resource is a Kubernetes-native envelope around a
@@ -101,9 +100,8 @@ type GitRepositoryStatus struct {
 type GitRepository struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	Spec   GitRepositorySpec   `json:"spec,omitempty"`
-	Status GitRepositoryStatus `json:"status,omitempty"`
+	Spec              GitRepositorySpec   `json:"spec,omitempty"`
+	Status            GitRepositoryStatus `json:"status,omitempty"`
 }
 
 //

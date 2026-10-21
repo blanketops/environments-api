@@ -85,6 +85,7 @@ type RouteStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The operational lifecycle phase of the network path"
 // +kubebuilder:printcolumn:name="Host",type="string",JSONPath=".spec.contract.host",description="The target domain address to match"
 // +kubebuilder:printcolumn:name="Path",type="string",JSONPath=".spec.contract.path",description="The HTTP path prefix endpoint rule matching string"

@@ -85,6 +85,7 @@ type DomainStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The overall lifecycle phase of the domain mapping"
 // +kubebuilder:printcolumn:name="Host",type="string",JSONPath=".spec.contract.host",description="The fully qualified domain name target"
 // +kubebuilder:printcolumn:name="Strategy",type="string",JSONPath=".spec.contract.tlsStrategy",description="Provisioning path path (platform vs custom)"
