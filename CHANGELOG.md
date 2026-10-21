@@ -1,13 +1,41 @@
-# Changelog
+## [0.3.0] - 2026-10-21
 
-All notable changes to this project will be documented in this file.
+### 🐛 Bug Fixes
 
+- Use the verbatim Apache-2.0 license text
+
+### 💼 Other
+
+- Merge release/v0.3.0 into main
+
+### 📚 Documentation
+
+- Auto-generate code documentation [skip ci]
+
+### ⚙️ Miscellaneous Tasks
+
+- Sync develop with main after release/v0.2.9
+- *(release)* Make the workflows' commits verified
+- Run every job on the self-hosted runners
+- *(ci)* Bump actions/setup-go from 6 to 7
+- *(release)* Update changelog for v0.2.9
+- Do not fail a job when the artifact upload is refused
+- Sync develop with main
+- *(dependabot)* Open dependency PRs against main
+- Sync develop with main
+- *(code-docs)* Land generated docs on main through a pull request
+- *(release)* Merge the release and its changelog into main through pull requests
+- Sync develop with main
 ## [0.2.9] - 2026-08-20
 
 ### 🐛 Bug Fixes
 
 - *(templates)* Move issue templates to the path GitHub actually reads
 - *(templates)* Remove Contract Change issue type -- doesn't belong here
+
+### 💼 Other
+
+- Merge release/v0.2.9 into main
 
 ### 📚 Documentation
 
@@ -21,11 +49,6 @@ All notable changes to this project will be documented in this file.
 - *(ci)* Bump actions/create-github-app-token from 2 to 3
 - *(ci)* Bump softprops/action-gh-release from 2 to 3
 - Bring issue/PR template fixes into main
-
-### Release
-
-- Merge release/v0.2.9 into main
-
 ## [0.2.8] - 2026-08-20
 
 ### 📚 Documentation
@@ -38,8 +61,12 @@ All notable changes to this project will be documented in this file.
 - Sync develop with main after release/v0.2.7
 - Add dependabot.yml (gomod, github-actions)
 - Bring dependabot.yml into main (Dependabot reads config from default branch)
-
 ## [0.2.7] - 2026-08-18
+
+### 💼 Other
+
+- Bring main into develop (main wins on conflict)
+- Merge release/v0.2.7 into main
 
 ### ⚙️ Miscellaneous Tasks
 
@@ -47,15 +74,6 @@ All notable changes to this project will be documented in this file.
 - *(PROJECT)* Lowercase repo/path to match go.mod module path
 - Use GitHub App token instead of GH_PAT for release workflows
 - Use GitHub App token instead of GH_PAT for release workflows
-
-### Merge
-
-- Bring main into develop (main wins on conflict)
-
-### Release
-
-- Merge release/v0.2.7 into main
-
 ## [0.2.6] - 2026-07-12
 
 ### ⚙️ Miscellaneous Tasks
@@ -63,7 +81,6 @@ All notable changes to this project will be documented in this file.
 - *(release)* Update changelog for v0.2.5
 - Sync develop with main after release/v0.2.5
 - *(go.mod)* Use lowercase module path github.com/blanketops/environments-api
-
 ## [0.2.5] - 2026-07-12
 
 ### 🐛 Bug Fixes
@@ -74,181 +91,153 @@ All notable changes to this project will be documented in this file.
 
 - *(release)* Update changelog for v0.2.4
 - Sync develop with main after release/v0.2.4
-
 ## [0.2.4] - 2026-07-12
 
 ### 🐛 Bug Fixes
 
 - *(ci)* Add GOPATH/bin to PATH so mage is found on ubuntu-latest
 
+### 💼 Other
+
+- Merge release/v0.2.4 into main
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(release)* Update changelog for v0.2.3
 - Sync develop with main after release/v0.2.3
 - *(docs)* Sync AGENTS.md/PROJECT/README with networks group move and drop BuildTrigger
-
-### Release
-
-- Merge release/v0.2.4 into main
-
 ## [0.2.3] - 2026-07-01
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.2.2
 - *(release)* Update changelog for v0.2.2
-
 ## [0.2.2] - 2026-07-01
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(release)* Update changelog for v0.2.1
 - Sync develop with main after release/v0.2.1
-
 ## [0.2.1] - 2026-07-01
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(release)* Update changelog for v0.2.0
 - Sync develop with main after release/v0.2.0
-
 ## [0.2.0] - 2026-07-01
+
+### 💼 Other
+
+- Merge release/v0.2.0 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.9
 - *(release)* Update changelog for v0.1.9
-
-### Release
-
-- Merge release/v0.2.0 into main
-
 ## [0.1.9] - 2026-07-01
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.8
 - *(release)* Update changelog for v0.1.8
-
 ## [0.1.8] - 2026-06-12
+
+### 💼 Other
+
+- *(workflows)* Fomart, update breaking magefile
+- Merge release/v0.1.8 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(release)* Update changelog for v0.1.7
 - Sync develop with main after release/v0.1.7
-
-### Bugfix
-
-- *(workflows)* Fomart, update breaking magefile
-
-### Release
-
-- Merge release/v0.1.8 into main
-
 ## [0.1.7] - 2026-06-11
+
+### 💼 Other
+
+- Merge release/v0.1.7 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.6
 - *(release)* Update changelog for v0.1.6
-
-### Release
-
-- Merge release/v0.1.7 into main
-
 ## [0.1.6] - 2026-06-11
+
+### 💼 Other
+
+- *(ci)* # udpate ci release workflows include summary
+- *(ci)* # udpate ci release workflows include summary
+- *(ci)* # udpate ci release workflows include summary
+- Merge release/v0.1.6 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.5
 - *(release)* Update changelog for v0.1.5
-
-### Bugfix
-
-- *(ci)* # udpate ci release workflows include summary
-- *(ci)* # udpate ci release workflows include summary
-- *(ci)* # udpate ci release workflows include summary
-
-### Release
-
-- Merge release/v0.1.6 into main
-
 ## [0.1.5] - 2026-06-11
+
+### 💼 Other
+
+- *(ci)* # udpate ci release workflows include summary
+- Merge release/v0.1.5 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.4
 - *(release)* Update changelog for v0.1.4
-
-### Bugfix
-
-- *(ci)* # udpate ci release workflows include summary
-
-### Release
-
-- Merge release/v0.1.5 into main
-
 ## [0.1.4] - 2026-04-27
+
+### 💼 Other
+
+- Merge release/v0.1.4 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.3
 - *(release)* Update changelog for v0.1.3
-
-### Release
-
-- Merge release/v0.1.4 into main
-
 ## [0.1.3] - 2026-04-27
+
+### 💼 Other
+
+- Merge release/v0.1.3 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.2
 - *(release)* Update changelog for v0.1.2
-
-### Release
-
-- Merge release/v0.1.3 into main
-
 ## [0.1.2] - 2026-04-27
+
+### 💼 Other
+
+- Merge release/v0.1.2 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.1
 - Update apicontract workflow to use mage verify
 - *(release)* Update changelog for v0.1.1
-
-### Release
-
-- Merge release/v0.1.2 into main
-
 ## [0.1.1] - 2026-04-27
+
+### 💼 Other
+
+- Merge release/v0.1.1 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.1.0
 - Update apicontract workflow to use mage verify
 - *(release)* Update changelog for v0.1.0
-
-### Release
-
-- Merge release/v0.1.1 into main
-
 ## [0.1.0] - 2026-04-27
+
+### 💼 Other
+
+- *(workflows)* Add release workflows
+- *(techdebt)* Remove license header
+- Merge release/v0.1.0 into main
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(release)* Update changelog for v0.0.9
-
-### Bugfix
-
-- *(workflows)* Add release workflows
-- *(techdebt)* Remove license header
-
-### Release
-
-- Merge release/v0.1.0 into main
-
 ## [0.0.6] - 2026-02-21
 
 ### 🚀 Features
@@ -257,8 +246,7 @@ All notable changes to this project will be documented in this file.
 - *(gov)* Add license to all files
 - *(types)* Add githubpayload
 
-### Bugfix
+### 💼 Other
 
 - *(ci)* Run on self-hosted strict, add release to consistent
-
-<!-- generated by git-cliff -->
+## [0.0.1] - 2026-02-06
