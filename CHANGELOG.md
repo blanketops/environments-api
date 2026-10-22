@@ -1,3 +1,17 @@
+## [0.3.1] - 2026-10-22
+
+### 📚 Documentation
+
+- Auto-generate code documentation [skip ci] (#90)
+
+### ⚙️ Miscellaneous Tasks
+
+- Sync develop with main after release/v0.3.0
+- *(markers)* Add printerColumns
+- *(markers)* Add printerColumns, housekeeping and sanitizing
+- *(markers)* Add printerColumns, housekeeping and sanitizing
+- *(markers)* Add printerColumns, housekeeping and sanitizing
+- *(finalize)* Continue when the release pull request is already merged
 ## [0.3.0] - 2026-10-21
 
 ### 🐛 Bug Fixes
@@ -26,6 +40,7 @@
 - *(code-docs)* Land generated docs on main through a pull request
 - *(release)* Merge the release and its changelog into main through pull requests
 - Sync develop with main
+- *(release)* Update changelog for v0.3.0 (#87)
 ## [0.2.9] - 2026-08-20
 
 ### 🐛 Bug Fixes
