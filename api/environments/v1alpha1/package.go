@@ -28,7 +28,7 @@ import (
 //
 
 // PackageSpec is a Kubernetes-native envelope around the canonical
-// BlanketOps Package contract.
+// BlanketOps Environment Package contract.
 //
 // IMPORTANT:
 // - Kubernetes does NOT understand the contents of `Contract`
@@ -41,7 +41,7 @@ import (
 // - Contract layer: semantic meaning
 type PackageSpec struct {
 
-	// Contract is the canonical BlanketOps Package specification.
+	// Contract is the canonical BlanketOps Environments Package specification.
 	//
 	// This field is intentionally opaque to Kubernetes and schema generation.
 	// It is preserved verbatim by the API server.
@@ -62,7 +62,7 @@ type PackageSpec struct {
 // This mirrors the contract status but remains opaque to Kubernetes.
 type PackageStatus struct {
 
-	// Contract is the canonical BlanketOps Package status.
+	// Contract is the canonical BlanketOps Environments Package status.
 	//
 	// This field is opaque and preserved verbatim.
 	//
@@ -86,10 +86,17 @@ type PackageStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The current reconciliation phase of the package"
+// +kubebuilder:printcolumn:name="Package-Name",type="string",JSONPath=".spec.contract.name",description="The logical name of the packaged application"
+// +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.contract.version",description="The version identifier of the package contents"
+// +kubebuilder:printcolumn:name="Enabled",type="boolean",JSONPath=".spec.contract.enabled",description="Whether this package is actively reconciling"
+// +kubebuilder:printcolumn:name="Diff-Applied",type="boolean",JSONPath=".status.contract.diffApplied",description="Whether the last sync resulted in changes",priority=1
+// +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.contract.message",description="Reconciliation failure or diagnostics summary",priority=1
+// +kubebuilder:printcolumn:name="Last-Updated",type="date",JSONPath=".status.contract.lastUpdated",description="The last time the package status was updated",priority=1
+
+// Package represents a versioned delivery artifact tracking manifest state.
 // Package represents a declarative request to Package an artifact.
-//
-// This resource is a Kubernetes-native envelope around a
-// transport-agnostic BlanketOps Package contract.
+// This resource is a Kubernetes-native envelope around a transport-agnostic BlanketOps Environments Package contract.
 type Package struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
