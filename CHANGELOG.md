@@ -1,3 +1,10 @@
+## [0.3.2] - 2026-10-23
+
+### ⚙️ Miscellaneous Tasks
+
+- Sync develop with main after release/v0.3.1
+- Run the releaser in the release workflows
+- Sync develop with main
 ## [0.3.1] - 2026-10-22
 
 ### 📚 Documentation
@@ -12,6 +19,7 @@
 - *(markers)* Add printerColumns, housekeeping and sanitizing
 - *(markers)* Add printerColumns, housekeeping and sanitizing
 - *(finalize)* Continue when the release pull request is already merged
+- *(release)* Update changelog for v0.3.1 (#93)
 ## [0.3.0] - 2026-10-21
 
 ### 🐛 Bug Fixes
