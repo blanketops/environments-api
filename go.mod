@@ -4,7 +4,7 @@ go 1.26.1
 
 require (
 	github.com/magefile/mage v1.17.2
-	k8s.io/apimachinery v0.37.1
+	k8s.io/apimachinery v0.37.2
 	k8s.io/kube-openapi v0.0.0-20260721132016-d427ff9ee9ad
 	sigs.k8s.io/controller-runtime v0.25.2
 )
