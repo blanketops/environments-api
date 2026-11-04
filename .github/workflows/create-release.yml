@@ -74,4 +74,4 @@ jobs:
           GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
           VERSION: ${{ github.event.inputs.version }}
         run: |
-          "${RUNNER_TEMP}/releaser" cut -ref develop -project blanketops/1 ${VERSION:+-release "$VERSION"}
+          "${RUNNER_TEMP}/releaser-linux-amd64" cut -ref develop -project blanketops/1 ${VERSION:+-release "$VERSION"}

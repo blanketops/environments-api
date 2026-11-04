@@ -126,7 +126,7 @@ jobs:
       - name: Releaser verify
         env:
           GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
-        run: '"${RUNNER_TEMP}/releaser" verify -release "${VERSION}"'
+        run: '"${RUNNER_TEMP}/releaser-linux-amd64" verify -release "${VERSION}"'
 
       # A release pull request merged by hand leaves nothing to merge: the
       # release branch is then not ahead of main, and opening a pull request
