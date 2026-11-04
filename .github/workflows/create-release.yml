@@ -61,10 +61,14 @@ jobs:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           set -euo pipefail
-          gh release download "${VERSION}" -R blanketops/environments-bots \
-            -p releaser-linux-amd64 \
-            -D "${RUNNER_TEMP}"
-          chmod +x "${RUNNER_TEMP}/releaser-linux-amd64"
+          if [ -n "${VERSION}" ]; then
+            gh release download "${VERSION}" -R blanketops/environments-bots \
+              -p releaser-linux-amd64 \
+              -D "${RUNNER_TEMP}"
+            chmod +x "${RUNNER_TEMP}/releaser-linux-amd64"
+          else
+            go build -o "${RUNNER_TEMP}/releaser" ./cmd/releaser
+          fi
 
       - name: Releaser cut
         env:
