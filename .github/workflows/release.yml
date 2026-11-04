@@ -84,7 +84,9 @@ jobs:
               if: always()
               uses: blanketops/environments-bots/.github/actions/releaser@v0.0.8
               with:
-                  command: complete
-                  release: ${{ github.ref_name }}
-                  client-id: ${{ secrets.RELEASER_APP_ID }}
-                  private-key: ${{ secrets.RELEASER_APP_PRIVATE_KEY }}
+                command: complete
+                release: ${{ github.ref_name }}
+                app-id: ${{ secrets.DEVELOPER_APP_ID }}
+                private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
+                owner: blanketops
+                repositories: ${{ github.event.repository.name }}
