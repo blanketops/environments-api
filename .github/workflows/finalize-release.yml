@@ -106,22 +106,21 @@ jobs:
         id: releaser-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.RELEASER_APP_ID }}
-          private-key: ${{ secrets.RELEASER_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.DEVELOPER_APP_ID }}
+          private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
           owner: blanketops
-          repositories: environments-bots
+          repositories: ${{ github.event.repository.name }}
 
-      - name: Set up Go
-        uses: actions/setup-go@v7
-        with:
-          go-version-file: go.mod
-          cache: false
-
-      - name: Build releaser
+      - name: Download releaser binary
+        env:
+          GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
+          VERSION: ${{ github.event.inputs.version }}
         run: |
-          git checkout --quiet --detach "origin/release/${VERSION}"
-          go build -o "${RUNNER_TEMP}/releaser" ./cmd/releaser
-          git checkout --quiet -
+          set -euo pipefail
+          gh release download "${VERSION}" -R blanketops/environments-bots \
+            -p releaser-linux-amd64 \
+            -D "${RUNNER_TEMP}"
+          chmod +x "${RUNNER_TEMP}/releaser-linux-amd64"
 
       - name: Releaser verify
         env:
