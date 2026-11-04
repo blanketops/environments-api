@@ -1,10 +1,5 @@
 # =============================================================================
-# finalize-release.yml — Merge, Tag, and Sync a Release
-#
-# Manually triggered. Merges release/{version} into main, regenerates the
-# changelog there, tags the result, syncs main back into develop, then
-# deletes the release branch. Creating the tag triggers the Release workflow
-# (GitHub Release).
+# finalize-release.yml — Finalize Release
 #
 # Auth:
 #   Uses the BlanketOps-Environments GitHub App (via

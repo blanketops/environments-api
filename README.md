@@ -77,3 +77,7 @@ To generate all artifacts:
 mage generate
 mage manifests
 ```
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE) for details.
