@@ -1,9 +1,11 @@
-# Create Release — the releaser (blanketops/environments-bots, as the
-# BlanketOps Environments Releaser App) checks the release and, when every
-# check passes, creates release/{version} at develop's head and opens its
-# pull request into main. It records each check on the Release issue
-# ("Release: {version}", on project 1 as Release), opening it if Plan
-# Release has not.
+# =============================================================================
+# create-release.yml — Cut a Release Branch and Open Its PR into Main
+#
+# The releaser (blanketops/environments-bots, as the BlanketOps Environments
+# Releaser App) checks the release and, when every check passes, creates
+# release/{version} at develop's head and opens its pull request into main.
+# It records each check on the Release issue ("Release: {version}", on
+# project 1 as Release), opening it if Plan Release has not.
 #
 # The version input is optional: empty releases the planned Release issue,
 # else the version the commits since the latest tag need. Once the branch

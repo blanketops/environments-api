@@ -1,3 +1,5 @@
+# =============================================================================
+# release.yml — Publish GitHub Release
 name: Release
 
 on:
