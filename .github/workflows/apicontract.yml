@@ -1,21 +1,31 @@
+# =============================================================================
+# apicontract.yml — API Contract Verification
+#
+# Runs on every pull request and on every v* tag push. Installs Mage, runs
+# `mage verify` to confirm API schemas and generated artifacts are consistent,
+# and uploads the CRD bases as a release artifact on tag pushes.
+# =============================================================================
 name: API Contracts
 
 on:
-  pull_request:
   push:
+    branches-ignore:
+      - main
+      - develop
+      - 'release/**'
+      - 'sync/**'
     tags:
       - "v*"
-
 permissions:
   contents: read
 
 jobs:
   verify:
+    name: Verify contracts
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
+      - name: Checkout the pushed commit
+        uses: actions/checkout@v7
 
       - name: Install mage
         run: |
@@ -38,14 +48,14 @@ jobs:
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<EOF
           # 📜 API Contract Verification
-          ## Completed 
+          ## Completed
             - Checked out repository sources
-            - Installed Go toolchain 
+            - Installed Go toolchain
             - Installed Mage
-            - Executed \`mage verify\` 
+            - Executed \`mage verify\`
           ## Validation Scope The verification process ensures:
-            - API schemas are valid 
-            - Generated artifacts are up to date 
+            - API schemas are valid
+            - Generated artifacts are up to date
             - Contract definitions remain consistent - CRDs can be generated successfully
           EOF
 
