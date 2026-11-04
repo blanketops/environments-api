@@ -19,8 +19,8 @@
 # branch and pull request as they are.
 #
 # Secrets required:
-#   RELEASER_APP_ID, RELEASER_APP_PRIVATE_KEY — the BlanketOps Environments
-#   Releaser App (Contents and Pull requests write, Issues and organization
+#   DEVELOPER_APP_ID, DEVELOPER_APP_PRIVATE_KEY — the BlanketOps Environments
+#   Developer App (Contents and Pull requests write, Issues and organization
 #   Projects write)
 # =============================================================================
 
@@ -50,7 +50,7 @@ jobs:
         id: releaser-token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ secrets.DEVELOPER_APP_ID }}
+          client-id: ${{ secrets.DEVELOPER_APP_ID }}
           private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
           owner: blanketops
           repositories: ${{ github.event.repository.name }}
