@@ -58,9 +58,9 @@ jobs:
           cache: false
 
       - name: Build releaser
-        run: go build -o "${RUNNER_TEMP}/releaser" ./cmd/releaser
+        run: go build -o "${RUNNER_TEMP}/releaser-linux-amd64" ./cmd/releaser
 
       - name: Releaser plan
         env:
           GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
-        run: '"${RUNNER_TEMP}/releaser" plan -ref develop -project blanketops/1'
+        run: '"${RUNNER_TEMP}/releaser-linux-amd64" plan -ref develop -project blanketops/1'
