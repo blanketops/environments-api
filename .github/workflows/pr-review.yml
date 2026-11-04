@@ -53,7 +53,7 @@ jobs:
           cache: false
 
       - name: Build pr-reviewer
-        run: go build -o "${RUNNER_TEMP}/pr-reviewer" ./cmd/pr-reviewer
+        run: go build -o "${RUNNER_TEMP}/pr-reviewer" ./bin/pr-reviewer
 
       - name: Review pull request
         env:
