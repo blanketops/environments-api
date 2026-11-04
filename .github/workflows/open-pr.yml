@@ -62,4 +62,5 @@ jobs:
       - name: Open
         env:
           GH_TOKEN: ${{ steps.app.outputs.token }}
-        run: "${RUNNER_TEMP}/developer-linux-amd64" open -base develop
+        run: |
+          "${RUNNER_TEMP}/developer-linux-amd64" open -base develop
