@@ -36,7 +36,7 @@ jobs:
         id: pr-reviewer-token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ secrets.PR_REVIEWER_APP_ID }}
+          client-id: ${{ secrets.PR_REVIEWER_APP_ID }}
           private-key: ${{ secrets.PR_REVIEWER_APP_PRIVATE_KEY }}
           owner: blanketops
           repositories: ${{ github.event.repository.name }}
