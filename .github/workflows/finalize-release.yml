@@ -120,7 +120,7 @@ jobs:
       - name: Build releaser
         run: |
           git checkout --quiet --detach "origin/release/${VERSION}"
-          go build -o "${RUNNER_TEMP}/releaser" ./cmd/releaser
+          go build -o "${RUNNER_TEMP}/releaser-linux-amd64" "${RUNNER_TEMP}/cmd/releaser"
           git checkout --quiet -
 
       - name: Releaser verify
