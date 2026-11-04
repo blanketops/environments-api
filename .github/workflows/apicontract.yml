@@ -22,7 +22,7 @@ permissions:
 jobs:
   verify:
     name: Verify contracts
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout the pushed commit
         uses: actions/checkout@v7
