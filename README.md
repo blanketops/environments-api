@@ -8,34 +8,6 @@ for BlanketOps Environments.
 This repository contains **versioned Custom Resource Definitions (CRDs)** and
 their corresponding Go types. It is the **source of truth** for all environment,
 build, event, and source APIs used by BlanketOps components.
-
----
-
-## What This Repository Is
-
-This repository:
-
-- defines Kubernetes API schemas
-- owns CRD generation
-- provides Go types for consumers
-- enforces semantic versioning of contracts
-
-It is a **contract repository**, not a runtime.
-
----
-
-## What This Repository Is Not
-
-This repository does **not**:
-
-- run controllers
-- build container images
-- deploy to clusters
-- define RBAC, managers, or webhooks
-- contain reconciliation logic
-
-Those concerns live in downstream projects.
-
 ---
 
 ## API Groups and Versions
