@@ -55,19 +55,16 @@ jobs:
           owner: blanketops
           repositories: environments-bots
 
-      - name: Checkout develop
-        uses: actions/checkout@v7
-        with:
-          ref: develop
-
-      - name: Set up Go
-        uses: actions/setup-go@v7
-        with:
-          go-version-file: go.mod
-          cache: false
-
-      - name: Build releaser
-        run: go build -o "${RUNNER_TEMP}/releaser-linux-amd64" "${RUNNER_TEMP}/cmd/releaser"
+      - name: Download releaser binary
+        env:
+          GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
+          VERSION: ${{ github.event.inputs.version }}
+        run: |
+          set -euo pipefail
+          gh release download "${VERSION}" -R blanketops/environments-bots \
+            -p releaser-linux-amd64 \
+            -D "${RUNNER_TEMP}"
+          chmod +x "${RUNNER_TEMP}/releaser-linux-amd64"
 
       - name: Releaser cut
         env:
