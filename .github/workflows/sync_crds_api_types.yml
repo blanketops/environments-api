@@ -1,0 +1,77 @@
+# =============================================================================
+# sync-api-types.yml — Sync API Types & CRDs
+#
+# Triggers on published releases or manual workflow dispatch. Checks out the
+# environments-api repository, generates updated CRDs via `make manifests`, checks
+# out the environments-install repository, and commits/pushes any CRD changes
+# automatically to keep the installation manifests in sync.
+# =============================================================================
+name: Sync API Types & CRDs
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: # Allows manual trigger for testing
+
+jobs:
+  sync-crds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout API Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Generate Manifests & CRDs
+        run: |
+          make manifests
+
+      - name: Checkout Install Repository
+        uses: actions/checkout@v4
+        with:
+          repository: blanketops/environments-install
+          token: ${{ secrets.SYNC_PAT }}
+          path: environments-install
+
+      - name: Copy CRDs & Commit Changes
+        run: |
+          # Ensure destination directory exists in environments-install
+          mkdir -p environments-install/config/crd/bases
+
+          # Copy generated CRD manifests from api into install repo
+          cp -r config/crd/bases/* environments-install/config/crd/bases/
+
+          cd environments-install
+          
+          # Configure Git User
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage and commit if changes exist
+          git add config/crd/bases/
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No CRD changes detected. Skipping commit."
+          else
+            git commit -m "chore(crd): sync latest CRDs from environments-api release ${{ github.event.release.tag_name || github.sha }}"
+            git push origin main
+          fi
+
+      - name: Sync Execution Summary
+        if: always()
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+          # 🔄 API Types & CRD Synchronization
+          
+          ## Completed Actions
+          - Checked out \`environments-api\` source
+          - Generated latest Kubernetes manifests (`make manifests`)
+          - Checked out target \`environments-install\` repository
+          - Updated CRD bases under \`config/crd/bases\`
+          
+          ## Target Details
+          - **Destination Repository:** \`blanketops/environments-install\`
+          - **Path:** \`config/crd/bases/\`
+          EOF
