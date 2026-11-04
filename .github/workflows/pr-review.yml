@@ -60,4 +60,4 @@ jobs:
           GH_TOKEN: ${{ steps.pr-reviewer-token.outputs.token }}
           PR: ${{ github.event.pull_request.number }}
         run: |
-          "${RUNNER_TEMP}/pr-reviewer" review -pr "${PR}"
+          "${RUNNER_TEMP}/pr-reviewer-linux-amd64" review -pr "${PR}"
