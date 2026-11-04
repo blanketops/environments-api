@@ -41,10 +41,10 @@ jobs:
         id: releaser-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.RELEASER_APP_ID }}
-          private-key: ${{ secrets.RELEASER_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.DEVELOPER_APP_ID }}
+          private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
           owner: blanketops
-          repositories: environments-bots
+          repositories: ${{ github.event.repository.name }}
 
       - name: Download releaser binary
         env:
