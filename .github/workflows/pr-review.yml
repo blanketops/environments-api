@@ -53,11 +53,11 @@ jobs:
           cache: false
 
       - name: Build pr-reviewer
-        run: go build -o "${RUNNER_TEMP}/pr-reviewer" ./cmd/pr-reviewer
+        run: go build -o "${RUNNER_TEMP}/pr-reviewer-linux-amd64" ./
 
       - name: Review pull request
         env:
           GH_TOKEN: ${{ steps.pr-reviewer-token.outputs.token }}
           PR: ${{ github.event.pull_request.number }}
         run: |
-          "${RUNNER_TEMP}/pr-reviewer" review -pr "${PR}"
+          "${RUNNER_TEMP}/pr-reviewer-linux-amd64" review -pr "${PR}"

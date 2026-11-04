@@ -67,7 +67,7 @@ jobs:
           cache: false
 
       - name: Build releaser
-        run: go build -o "${RUNNER_TEMP}/releaser-linux-amd64" ./cmd/releaser
+        run: go build -o "${RUNNER_TEMP}/releaser-linux-amd64" ./
 
       - name: Releaser cut
         env:
