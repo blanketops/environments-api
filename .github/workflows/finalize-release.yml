@@ -48,8 +48,8 @@
 #
 # Secrets required:
 #   APP_ID, APP_PRIVATE_KEY — GitHub App credentials
-#   RELEASER_APP_ID, RELEASER_APP_PRIVATE_KEY — the BlanketOps Environments
-#   Releaser App, which runs cmd/releaser on the Release issue
+#   DEVELOPER_APP_ID, DEVELOPER_APP_PRIVATE_KEY — the BlanketOps Environments
+#   Developer App, which runs cmd/releaser on the Release issue
 # =============================================================================
 
 name: Finalize Release
@@ -106,7 +106,7 @@ jobs:
         id: releaser-token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ secrets.DEVELOPER_APP_ID }}
+          client-id: ${{ secrets.DEVELOPER_APP_ID }}
           private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
           owner: blanketops
           repositories: ${{ github.event.repository.name }}
