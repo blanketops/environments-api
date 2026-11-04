@@ -1,3 +1,15 @@
+# =============================================================================
+# apicontract.yml — API Contract Verification
+#
+# Runs on every pull request and on every v* tag push. Installs Mage, runs
+# `mage verify` to confirm API schemas and generated artifacts are consistent,
+# and uploads the CRD bases as a release artifact on tag pushes.
+#
+# Trigger scope:
+#   pull_request (any branch); push tags matching v*
+#
+# Secrets required: none
+# =============================================================================
 name: API Contracts
 
 on:
