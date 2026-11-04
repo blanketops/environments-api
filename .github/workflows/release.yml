@@ -14,10 +14,16 @@ jobs:
         runs-on: self-hosted
 
         steps:
-            - name: Checkout tag
-              uses: actions/checkout@v7
-              with:
-                  fetch-depth: 0
+            - name: Download releaser binary
+              env:
+                GH_TOKEN: ${{ steps.app.outputs.token }}
+                VERSION: ${{ github.event.inputs.version }}
+              run: |
+                set -euo pipefail
+                gh release download "${VERSION}" -R blanketops/environments-bots \
+                  -p releaser-linux-amd64 \
+                  -D "${RUNNER_TEMP}"
+                chmod +x "${RUNNER_TEMP}/releaser-linux-amd64"
 
             - name: Install git-cliff
               run: |
@@ -78,7 +84,9 @@ jobs:
               if: always()
               uses: blanketops/environments-bots/.github/actions/releaser@v0.0.8
               with:
-                  command: complete
-                  release: ${{ github.ref_name }}
-                  client-id: ${{ secrets.RELEASER_APP_ID }}
-                  private-key: ${{ secrets.RELEASER_APP_PRIVATE_KEY }}
+                command: complete
+                release: ${{ github.ref_name }}
+                app-id: ${{ secrets.DEVELOPER_APP_ID }}
+                private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
+                owner: blanketops
+                repositories: ${{ github.event.repository.name }}
