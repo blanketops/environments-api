@@ -10,89 +10,88 @@ permissions:
     contents: write
 
 jobs:
-    release:
-        runs-on: self-hosted
+  release:
+    runs-on: self-hosted
+    steps:
+      - name: Install git-cliff
+        run: |
+          if ! command -v git-cliff >/dev/null 2>&1; then
+            curl -fL https://github.com/orhun/git-cliff/releases/download/v2.4.0/git-cliff-2.4.0-x86_64-unknown-linux-gnu.tar.gz -o cliff.tar.gz
+            tar -xzf cliff.tar.gz
+            sudo mv git-cliff-2.4.0/git-cliff /usr/local/bin/git-cliff
+          fi
+            git-cliff --version
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_ID_PRIVATE_KEY }}
+          owner: blanketops
+          repositories: environments-api
 
-        steps:
-          - name: Install git-cliff
-            run: |
-              if ! command -v git-cliff >/dev/null 2>&1; then
-                curl -fL https://github.com/orhun/git-cliff/releases/download/v2.4.0/git-cliff-2.4.0-x86_64-unknown-linux-gnu.tar.gz -o cliff.tar.gz
-                tar -xzf cliff.tar.gz
-                sudo mv git-cliff-2.4.0/git-cliff /usr/local/bin/git-cliff
-              fi
-                git-cliff --version
-          - name: Generate GitHub App token
-            id: app-token
-            uses: actions/create-github-app-token@v3
-            with:
-              client-id: ${{ vars.APP_CLIENT_ID }}
-              private-key: ${{ secrets.APP_ID_PRIVATE_KEY }}
-              owner: blanketops
-              repositories: environments-api
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
 
-          - name: Checkout
-            uses: actions/checkout@v7
-            with:
-              token: ${{ steps.app-token.outputs.token }}
-              fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: false      
 
-          - name: Set up Go
-            uses: actions/setup-go@v7
-            with:
-              go-version-file: go.mod
-              cache: false      
+      - name: Generate & package CRDs
+        run: |
+          command -v mage >/dev/null 2>&1 || go install github.com/magefile/mage@latest
+          export PATH="$PATH:$(go env GOPATH)/bin"
+          mage manifests
+          tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
 
-          - name: Generate & package CRDs
-            run: |
-              command -v mage >/dev/null 2>&1 || go install github.com/magefile/mage@latest
-              export PATH="$PATH:$(go env GOPATH)/bin"
-              mage manifests
-              tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
+      - name: Generate release notes
+        run: git-cliff --config .cliff.toml --latest --output RELEASE_NOTES.md
 
-          - name: Generate release notes
-            run: git-cliff --config .cliff.toml --latest --output RELEASE_NOTES.md
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          body_path: RELEASE_NOTES.md
+          files: crds-${{ github.ref_name }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          - name: Create GitHub Release
-            uses: softprops/action-gh-release@v3
-            with:
-              body_path: RELEASE_NOTES.md
-              files: crds-${{ github.ref_name }}.tar.gz
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release Summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+          # 📦 GitHub Release Published
 
-          - name: Release Summary
-            run: |
-              cat >> $GITHUB_STEP_SUMMARY <<EOF
-              # 📦 GitHub Release Published
+          **Version:** \`${{ github.ref_name }}\`
 
-              **Version:** \`${{ github.ref_name }}\`
+          ## Completed
 
-              ## Completed
+          - Generated CHANGELOG.md using git-cliff
+          - Committed changelog updates to main
+          - Generated release notes
+          - Published GitHub Release
 
-              - Generated CHANGELOG.md using git-cliff
-              - Committed changelog updates to main
-              - Generated release notes
-              - Published GitHub Release
+           ## Artifacts
 
-               ## Artifacts
+          - CHANGELOG.md
+          - RELEASE_NOTES.md
+          - CRDs (crds-${{ github.ref_name }}.tar.gz, attached to the release)
+          - GitHub Release
 
-              - CHANGELOG.md
-              - RELEASE_NOTES.md
-              - CRDs (crds-${{ github.ref_name }}.tar.gz, attached to the release)
-              - GitHub Release
+          ## Source Tag
 
-               ## Source Tag
+          \`${{ github.ref_name }}\`
 
-              \`${{ github.ref_name }}\`
+          EOF
 
-              EOF
-
-          - name: Releaser complete
-            if: always()
-            uses: blanketops/environments-bots/.github/actions/releaser@v0.1.0
-            with:
-              command: complete
-              release: ${{ github.ref_name }}
-              app-id: ${{ vars.DEVELOPER_CLIENT_ID }}
-              private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
+      - name: Releaser complete
+        if: always()
+        uses: blanketops/environments-bots/.github/actions/releaser@v0.1.0
+        with:
+          command: complete
+          release: ${{ github.ref_name }}
+          app-id: ${{ vars.DEVELOPER_CLIENT_ID }}
+          private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
