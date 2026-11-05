@@ -1,3 +1,70 @@
+## [0.3.4] - 2026-11-05
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Fix Releaser complete inputs and use baked-in git-cliff
+- *(clean)* Run the cleaner hourly instead of daily
+- *(clean)* Lower retention to 5 runs per workflow
+- *(sync-crds)* Generate CRDs with mage, not make
+- Persist CRDs as a release asset, drop ephemeral artifact uploads
+- *(finalize-release)* Put gomarkdoc on PATH after go install
+- *(ci)* Update actions
+- *(ci)* Update actions
+- *(ci)* Update actions
+- *(ci)* Update actions
+- *(ci)* Update actions
+## [0.3.3] - 2026-11-05
+
+### 🐛 Bug Fixes
+
+- Use pre-built developer binary for open-pr.yml
+- Use pre-built releaser binary instead of building from source
+- Use pre-built releaser binary instead of go run
+- Use DEVELOPER_APP_ID and correct repository scope for PR reviewer workflows
+- Use developer binary not releaser binary
+- Use client-id for create-github-app-token@v3
+- Make gh release download conditional on VERSION - planned release flow now builds from source instead of crashing on missing release
+
+### 💼 Other
+
+- *(deps)* Bump environments-bots releaser to v0.0.7
+- *(deps)* Bump developer binary to v0.1.0
+
+### 📚 Documentation
+
+- Standardize workflow header comments
+- Standardize open-pr.yml header comments
+- Fix open-pr.yml to use pre-built binary
+- Standardize workflow header comments
+- Standardize apicontract.yml header comments
+- Update create-github-app-token to use client-id
+- Update create-github-app-token to use client-id
+
+### ⚙️ Miscellaneous Tasks
+
+- Sync develop with main after release/v0.3.2
+- *(developer)* Run the developer bot at v0.0.8
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(docs)* Update readme
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- *(ci)* Update bot action versions
+- Migrate environments-api bots to v0.1.0 and fix auth
+- Fix env-api release workflows to consume env-bots v0.1.0
 ## [0.3.2] - 2026-10-23
 
 ### ⚙️ Miscellaneous Tasks
@@ -5,6 +72,7 @@
 - Sync develop with main after release/v0.3.1
 - Run the releaser in the release workflows
 - Sync develop with main
+- *(release)* Update changelog for v0.3.2 (#98)
 ## [0.3.1] - 2026-10-22
 
 ### 📚 Documentation
