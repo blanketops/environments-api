@@ -2,7 +2,7 @@
 # sync-api-types.yml — Sync API Types & CRDs
 #
 # Triggers on published releases or manual workflow dispatch. Checks out the
-# environments-api repository, generates updated CRDs via `make manifests`, checks
+# environments-api repository, generates updated CRDs via `mage manifests`, checks
 # out the environments-install repository, and commits/pushes any CRD changes
 # automatically to keep the installation manifests in sync.
 # =============================================================================
@@ -27,7 +27,12 @@ jobs:
 
       - name: Generate Manifests & CRDs
         run: |
-          make manifests
+          # environments-api has no Makefile; CRDs are generated via mage
+          # (`mage manifests` bootstraps controller-gen itself). mage is baked
+          # into the runner image; install it only if it is missing.
+          command -v mage >/dev/null 2>&1 || go install github.com/magefile/mage@latest
+          export PATH="$PATH:$(go env GOPATH)/bin"
+          mage manifests
 
       - name: Checkout Install Repository
         uses: actions/checkout@v4
@@ -67,7 +72,7 @@ jobs:
           
           ## Completed Actions
           - Checked out \`environments-api\` source
-          - Generated latest Kubernetes manifests (`make manifests`)
+          - Generated latest Kubernetes manifests (\`mage manifests\`)
           - Checked out target \`environments-install\` repository
           - Updated CRD bases under \`config/crd/bases\`
           
