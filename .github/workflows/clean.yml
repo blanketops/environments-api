@@ -28,7 +28,7 @@ on:
       keep:
         description: "Newest runs to keep per workflow"
         required: false
-        default: "20"
+        default: "5"
       dry-run:
         description: "Read only: show what would be deleted"
         type: boolean
@@ -78,7 +78,7 @@ jobs:
       - name: Prune workflow runs
         env:
           GH_TOKEN: ${{ steps.cleaner-token.outputs.token }}
-          KEEP: ${{ github.event.inputs.keep || '20' }}
+          KEEP: ${{ github.event.inputs.keep || '5' }}
           DRY_RUN: ${{ github.event.inputs.dry-run || 'false' }}
         run: |
           args=(runs -keep "${KEEP}")
