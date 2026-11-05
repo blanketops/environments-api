@@ -7,7 +7,7 @@ for BlanketOps Environments.
 
 This repository contains **versioned Custom Resource Definitions (CRDs)** and
 their corresponding Go types. It is the **source of truth** for all environment,
-build, event, and source APIs used by BlanketOps components.
+build, event, and source APIs used by BlanketOps Environments components.
 
 ---
 
