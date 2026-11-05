@@ -7,7 +7,7 @@ for BlanketOps Environments.
 
 This repository contains **versioned Custom Resource Definitions (CRDs)** and
 their corresponding Go types. It is the **source of truth** for all environment,
-build, event, and source APIs used by BlanketOps components.
+build, event, and source APIs used by BlanketOps Environments components.
 
 ---
 
@@ -42,7 +42,7 @@ Breaking changes require a new API version.
 ## Code Generation
 
 CRDs and deepcopy code are generated using `controller-gen`, invoked via
-[mage](https://magefile.org) targets (this repo has no Makefile).
+[mage](https://magefile.org).
 
 To generate all artifacts:
 
