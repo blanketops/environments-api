@@ -1,7 +1,7 @@
 # =============================================================================
 # clean.yml — Prune old workflow runs with the Cleaner bot
 #
-# Runs on a daily schedule (and on demand) to delete completed workflow runs
+# Runs hourly (and on demand) to delete completed workflow runs
 # beyond the newest N per workflow, which otherwise fill the self-hosted runner
 # node's disk. The cleaner, as the BlanketOps Environments Cleaner App, is built
 # and signed in environments-bots and downloaded here, verified with cosign
@@ -12,7 +12,7 @@
 # demand.
 #
 # Trigger scope:
-#   schedule: 03:00 UTC daily; workflow_dispatch (keep, dry-run inputs)
+#   schedule: hourly (top of each hour); workflow_dispatch (keep, dry-run inputs)
 #
 # Secrets/vars required:
 #   vars.CLEANER_CLIENT_ID, secrets.CLEANER_APP_PRIVATE_KEY — the Cleaner App
@@ -22,13 +22,13 @@ name: Clean
 
 on:
   schedule:
-    - cron: "0 3 * * *" # 03:00 UTC daily
+    - cron: "0 * * * *" # top of every hour
   workflow_dispatch:
     inputs:
       keep:
         description: "Newest runs to keep per workflow"
         required: false
-        default: "20"
+        default: "5"
       dry-run:
         description: "Read only: show what would be deleted"
         type: boolean
@@ -78,7 +78,7 @@ jobs:
       - name: Prune workflow runs
         env:
           GH_TOKEN: ${{ steps.cleaner-token.outputs.token }}
-          KEEP: ${{ github.event.inputs.keep || '20' }}
+          KEEP: ${{ github.event.inputs.keep || '5' }}
           DRY_RUN: ${{ github.event.inputs.dry-run || 'false' }}
         run: |
           args=(runs -keep "${KEEP}")
