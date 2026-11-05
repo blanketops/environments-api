@@ -15,10 +15,16 @@ jobs:
 
         steps:
             - name: Install git-cliff
+              # git-cliff is baked into the self-hosted runner image; only fall
+              # back to downloading it if it is somehow missing. The download
+              # had been returning a throttled 92-byte stub that broke `tar`.
               run: |
-                  curl -L https://github.com/orhun/git-cliff/releases/download/v2.4.0/git-cliff-2.4.0-x86_64-unknown-linux-gnu.tar.gz -o cliff.tar.gz
-                  tar -xzf cliff.tar.gz
-                  sudo mv git-cliff-2.4.0/git-cliff /usr/local/bin/git-cliff
+                  if ! command -v git-cliff >/dev/null 2>&1; then
+                    curl -fL https://github.com/orhun/git-cliff/releases/download/v2.4.0/git-cliff-2.4.0-x86_64-unknown-linux-gnu.tar.gz -o cliff.tar.gz
+                    tar -xzf cliff.tar.gz
+                    sudo mv git-cliff-2.4.0/git-cliff /usr/local/bin/git-cliff
+                  fi
+                  git-cliff --version
 
             - name: Checkout main
               run: |
@@ -75,7 +81,5 @@ jobs:
               with:
                 command: complete
                 release: ${{ github.ref_name }}
-                client-id: ${{ secrets.DEVELOPER_APP_ID }}
+                app-id: ${{ secrets.DEVELOPER_APP_ID }}
                 private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
-                owner: blanketops
-                repositories: ${{ github.event.repository.name }}
