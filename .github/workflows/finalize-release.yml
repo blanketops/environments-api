@@ -160,7 +160,6 @@ jobs:
       - name: git-cliff version
         run: git-cliff --version
 
-
       - name: Generate CHANGELOG.md
         run: git-cliff --config .cliff.toml --tag "${VERSION}" --output CHANGELOG.md
 
