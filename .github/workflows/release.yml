@@ -23,10 +23,11 @@ jobs:
                   fi
                   git-cliff --version
 
-            - name: Checkout main
-              run: |
-                  git checkout main
-                  git pull origin main
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                fetch-depth: 0
+                token: ${{ steps.app-token.outputs.token }}
 
             - name: Generate & package CRDs
               run: |
