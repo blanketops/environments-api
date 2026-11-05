@@ -55,20 +55,23 @@ jobs:
           owner: blanketops
           repositories: ${{ github.event.repository.name }}
 
-      - name: Download releaser binary
+      - name: Download and verify the releaser binary
         env:
           GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
-          VERSION: ${{ github.event.inputs.version }}
+          # The releaser binary is a bots artifact: pin it to the bots release,
+          # separate from the version being cut (passed to `releaser cut` below).
+          RELEASER_VERSION: v0.1.0
         run: |
           set -euo pipefail
-          if [ -n "${VERSION}" ]; then
-            gh release download "${VERSION}" -R blanketops/environments-bots \
-              -p releaser-linux-amd64 \
-              -D "${RUNNER_TEMP}"
-            chmod +x "${RUNNER_TEMP}/releaser-linux-amd64"
-          else
-            go build -o "${RUNNER_TEMP}/releaser" ./cmd/releaser
-          fi
+          gh release download "${RELEASER_VERSION}" -R blanketops/environments-bots \
+            -p releaser-linux-amd64 -p releaser-linux-amd64.sigstore.json \
+            -D "${RUNNER_TEMP}"
+          cosign verify-blob \
+            --bundle "${RUNNER_TEMP}/releaser-linux-amd64.sigstore.json" \
+            --certificate-identity "https://github.com/blanketops/environments-bots/.github/workflows/release.yml@refs/tags/${RELEASER_VERSION}" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            "${RUNNER_TEMP}/releaser-linux-amd64"
+          chmod +x "${RUNNER_TEMP}/releaser-linux-amd64"
 
       - name: Releaser cut
         env:
