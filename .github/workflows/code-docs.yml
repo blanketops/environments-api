@@ -90,14 +90,6 @@ jobs:
           hack/api-pr.sh main "docs/code-${GITHUB_SHA::7}" \
             "docs: auto-generate code documentation [skip ci]" docs/code/
 
-      - name: Upload docs artifact
-        uses: actions/upload-artifact@v7
-        continue-on-error: true
-        with:
-          name: godoc-${{ github.sha }}
-          path: docs/code/
-          retention-days: 30
-
       - name: Build summary
         run: |
           echo "## 📚 Code Documentation" >> $GITHUB_STEP_SUMMARY
