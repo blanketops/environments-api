@@ -71,10 +71,10 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_ID_PRIVATE_KEY }}
           owner: blanketops
-          repositories: environments-bots
+          repositories: environments-api
 
       - name: Checkout
         uses: actions/checkout@v7
@@ -82,14 +82,6 @@ jobs:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
-      # The scripts come from the release branch, which is what is being
-      # released, or from main for one cut before they existed. They are
-      # copied out of the checkout because the steps below move it.
-      #
-      # main's `protect` ruleset takes changes only through a pull request
-      # and the App is not a bypass actor: the release branch is merged
-      # through its pull request (api-merge-pr.sh) and every file change
-      # lands through a pull request of its own (api-pr.sh).
       - name: Stage the API helpers
         run: |
           for script in api-commit.sh api-merge.sh api-merge-pr.sh api-pr.sh; do
@@ -98,15 +90,11 @@ jobs:
             chmod +x "${RUNNER_TEMP}/${script}"
           done
 
-      # The releaser (cmd/releaser), as the Releaser App, checks before
-      # anything is merged: one open Release issue, nothing still open into
-      # release/<version> or in the version's milestone, no tag yet. It is
-      # built from the release branch being finalized.
       - name: Generate Releaser App token
         id: releaser-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.DEVELOPER_APP_ID }}
+          client-id: ${{ vars.DEVELOPER_CLIENT_ID }}
           private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
           owner: blanketops
           repositories: ${{ github.event.repository.name }}
@@ -132,10 +120,6 @@ jobs:
           GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
         run: '"${RUNNER_TEMP}/releaser-linux-amd64" verify -release "${VERSION}"'
 
-      # A release pull request merged by hand leaves nothing to merge: the
-      # release branch is then not ahead of main, and opening a pull request
-      # for an empty difference fails (HTTP 422). The steps after this one
-      # still run on main as merged.
       - name: Merge release into main
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -157,9 +141,6 @@ jobs:
       - name: Install gomarkdoc
         run: |
           go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest
-          # go install drops the binary in GOPATH/bin, which is not on PATH on
-          # the self-hosted runner (code-docs.yml gets this for free via
-          # setup-go). Put it on PATH so the next step can find gomarkdoc.
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Generate code docs
@@ -176,12 +157,9 @@ jobs:
           git fetch --quiet origin main
           git checkout --quiet --detach origin/main
 
-      # git-cliff is baked into the runner image (zenith-runner-toolchain).
       - name: git-cliff version
         run: git-cliff --version
 
-      # --tag renders the commits since the last release under this version:
-      # the tag itself is only created after this file is committed.
       - name: Generate CHANGELOG.md
         run: git-cliff --config .cliff.toml --tag "${VERSION}" --output CHANGELOG.md
 
@@ -194,8 +172,6 @@ jobs:
           git fetch --quiet origin main
           git checkout --quiet --detach origin/main
 
-      # On the changelog commit, not the [skip ci] docs commit before it. See
-      # the header: a tag on a [skip ci] commit starts no workflow.
       - name: Tag release
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -217,8 +193,6 @@ jobs:
           "${RUNNER_TEMP}/api-merge.sh" develop main \
             "chore: sync develop with main after release/${VERSION}"
 
-      # A branch rule may forbid deleting release branches. The release is
-      # complete either way, so a refusal is reported, not failed on.
       - name: Delete release branch
         id: delete-branch
         env:

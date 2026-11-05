@@ -50,7 +50,7 @@ jobs:
         id: releaser-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.DEVELOPER_APP_ID }}
+          client-id: ${{ vars.DEVELOPER_CLIENT_ID }}
           private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
           owner: blanketops
           repositories: ${{ github.event.repository.name }}
@@ -58,8 +58,6 @@ jobs:
       - name: Download and verify the releaser binary
         env:
           GH_TOKEN: ${{ steps.releaser-token.outputs.token }}
-          # The releaser binary is a bots artifact: pin it to the bots release,
-          # separate from the version being cut (passed to `releaser cut` below).
           RELEASER_VERSION: v0.1.0
         run: |
           set -euo pipefail

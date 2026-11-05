@@ -15,9 +15,6 @@ jobs:
 
         steps:
             - name: Install git-cliff
-              # git-cliff is baked into the self-hosted runner image; only fall
-              # back to downloading it if it is somehow missing. The download
-              # had been returning a throttled 92-byte stub that broke `tar`.
               run: |
                   if ! command -v git-cliff >/dev/null 2>&1; then
                     curl -fL https://github.com/orhun/git-cliff/releases/download/v2.4.0/git-cliff-2.4.0-x86_64-unknown-linux-gnu.tar.gz -o cliff.tar.gz
@@ -32,19 +29,12 @@ jobs:
                   git pull origin main
 
             - name: Generate & package CRDs
-              # Attach CRDs to the release as a durable asset (survives run
-              # pruning). mage is baked into the runner image; fall back to
-              # installing it only if missing. `mage manifests` bootstraps
-              # controller-gen itself and writes config/crd/bases.
               run: |
                   command -v mage >/dev/null 2>&1 || go install github.com/magefile/mage@latest
                   export PATH="$PATH:$(go env GOPATH)/bin"
                   mage manifests
                   tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
 
-            # CHANGELOG.md is generated and committed by finalize-release.yml, before
-            # the tag is created. This workflow only reads it: it makes no commit of its
-            # own.
             - name: Generate release notes
               run: git-cliff --config .cliff.toml --latest --output RELEASE_NOTES.md
 
@@ -83,16 +73,11 @@ jobs:
 
                   EOF
 
-            # The releaser (blanketops/environments-bots, as the Releaser App)
-            # attaches the tag and the published release to the Release issue,
-            # closes it and sets it to Done. It runs even when a step above
-            # failed: it then finds no published release, says so on the
-            # issue, and leaves it open.
             - name: Releaser complete
               if: always()
               uses: blanketops/environments-bots/.github/actions/releaser@v0.1.0
               with:
                 command: complete
                 release: ${{ github.ref_name }}
-                app-id: ${{ secrets.DEVELOPER_APP_ID }}
+                app-id: ${{ vars.DEVELOPER_CLIENT_ID }}
                 private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
