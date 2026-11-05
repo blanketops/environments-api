@@ -41,7 +41,7 @@ jobs:
         id: releaser-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.DEVELOPER_APP_ID }}
+          client-id: ${{ secrets.DEVELOPER_CLIENT_ID }}
           private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
           owner: blanketops
           repositories: ${{ github.event.repository.name }}
