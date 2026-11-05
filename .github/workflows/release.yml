@@ -31,6 +31,17 @@ jobs:
                   git checkout main
                   git pull origin main
 
+            - name: Generate & package CRDs
+              # Attach CRDs to the release as a durable asset (survives run
+              # pruning). mage is baked into the runner image; fall back to
+              # installing it only if missing. `mage manifests` bootstraps
+              # controller-gen itself and writes config/crd/bases.
+              run: |
+                  command -v mage >/dev/null 2>&1 || go install github.com/magefile/mage@latest
+                  export PATH="$PATH:$(go env GOPATH)/bin"
+                  mage manifests
+                  tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
+
             # CHANGELOG.md is generated and committed by finalize-release.yml, before
             # the tag is created. This workflow only reads it: it makes no commit of its
             # own.
@@ -41,6 +52,7 @@ jobs:
               uses: softprops/action-gh-release@v3
               with:
                   body_path: RELEASE_NOTES.md
+                  files: crds-${{ github.ref_name }}.tar.gz
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -62,6 +74,7 @@ jobs:
 
                   - CHANGELOG.md
                   - RELEASE_NOTES.md
+                  - CRDs (crds-${{ github.ref_name }}.tar.gz, attached to the release)
                   - GitHub Release
 
                   ## Source Tag
