@@ -155,7 +155,12 @@ jobs:
             "release: merge release/${VERSION} into main"
 
       - name: Install gomarkdoc
-        run: go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest
+        run: |
+          go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest
+          # go install drops the binary in GOPATH/bin, which is not on PATH on
+          # the self-hosted runner (code-docs.yml gets this for free via
+          # setup-go). Put it on PATH so the next step can find gomarkdoc.
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Generate code docs
         run: |
