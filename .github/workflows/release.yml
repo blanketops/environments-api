@@ -49,7 +49,7 @@ jobs:
           tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
 
       - name: Generate SBOM (Software Bill of Materials)
-        uses: anchore/sbom-action@v0.18.0
+        uses: anchore/sbom-action@v0.24.3
         with:
           artifact-name: sbom-crds-${{ github.ref_name }}
           output-file: sbom-crds-${{ github.ref_name }}.spdx.json
