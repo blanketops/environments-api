@@ -18,7 +18,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout API Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Go
         uses: actions/setup-go@v7
@@ -35,7 +35,7 @@ jobs:
           mage manifests
 
       - name: Checkout Install Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: blanketops/environments-install
           token: ${{ secrets.SYNC_PAT }}
