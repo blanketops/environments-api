@@ -1,12 +1,22 @@
+## [0.3.7] - 2026-11-11
+
+### ⚙️ Miscellaneous Tasks
+
+- Sync develop with main after release/v0.3.6
+
+### 💼 Other
+
+- Merge release/v0.3.7 into main
 ## [0.3.6] - 2026-11-11
 
 ### ⚙️ Miscellaneous Tasks
 
+- Sync develop with main after release/v0.3.5
 - *(ci)* Bump actions/attest-build-provenance from 2 to 4
 - *(ci)* Bump anchore/sbom-action from 0.18.0 to 0.24.3
 - *(ci)* Bump actions/setup-go from 5 to 7
 - *(ci)* Bump actions/checkout from 4 to 7
-- Sync develop with main after release/v0.3.5
+- *(release)* Update changelog for v0.3.6 (#214)
 
 ### 💼 Other
 
