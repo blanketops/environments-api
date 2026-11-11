@@ -1,10 +1,11 @@
 # =============================================================================
 # release.yml — Build, Sign and Publish a Release (environments-api / CRDs)
 #
-# Tag-triggered release pipeline. Generates manifests (mage manifests via controller-gen),
-# packages CRDs, generates SBOMs, signs files with Cosign (keyless/OIDC),
-# generates GitHub build-provenance attestations, and publishes a GitHub Release
-# with all assets and signatures attached directly via the runner-baked `gh` CLI.
+# Tag-triggered. Generates CRD manifests (mage manifests), packages them,
+# generates an SPDX SBOM, signs each artifact with Cosign keyless into a
+# verifiable Sigstore bundle, attests SLSA build provenance, and publishes the
+# GitHub Release with the artifacts + bundles attached. All tooling (mage,
+# syft, cosign, git-cliff, gh) is baked into the runner image.
 # =============================================================================
 name: Release
 on:
@@ -60,25 +61,13 @@ jobs:
             cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
           done
 
-      - name: Attest SLSA build provenance
-        uses: actions/attest-build-provenance@v4
-        with:
-          subject-path: |
-            godoc-${{ steps.version.outputs.tag }}.tar.gz
-            coverage-${{ steps.version.outputs.tag }}.tar.gz
-            sbom-${{ steps.version.outputs.tag }}.spdx.json
-
-      - name: Sign Artifacts with Cosign (Keyless - using runner binary)
+      - name: Sign artifacts with Cosign (keyless OIDC)
         run: |
-          cosign sign-blob --yes \
-            --output-signature crds-${{ github.ref_name }}.tar.gz.sig \
-            crds-${{ github.ref_name }}.tar.gz
+          for f in "crds-${{ github.ref_name }}.tar.gz" "sbom-crds-${{ github.ref_name }}.spdx.json"; do
+            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+          done
 
-          cosign sign-blob --yes \
-            --output-signature sbom-crds-${{ github.ref_name }}.spdx.json.sig \
-            sbom-crds-${{ github.ref_name }}.spdx.json
-
-      - name: Generate GitHub Native Artifact Attestation
+      - name: Attest SLSA build provenance
         uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
@@ -90,15 +79,15 @@ jobs:
 
       - name: Create GitHub Release & Attach Assets via GitHub CLI (`gh`)
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh release create "${{ github.ref_name }}" \
             --title "${{ github.ref_name }}" \
             --notes-file RELEASE_NOTES.md \
             crds-${{ github.ref_name }}.tar.gz \
-            crds-${{ github.ref_name }}.tar.gz.sig \
+            crds-${{ github.ref_name }}.tar.gz.sigstore.json \
             sbom-crds-${{ github.ref_name }}.spdx.json \
-            sbom-crds-${{ github.ref_name }}.spdx.json.sig \
+            sbom-crds-${{ github.ref_name }}.spdx.json.sigstore.json \
             RELEASE_NOTES.md
 
       - name: Release Summary
@@ -109,20 +98,20 @@ jobs:
           ## Completed
           - Generated CRD manifests via `mage manifests`
           - Packaged CRDs into `crds-${{ github.ref_name }}.tar.gz`
-          - Generated quota-safe SPDX SBOM (`sbom-crds-${{ github.ref_name }}.spdx.json`)
-          - Signed all artifacts with runner-baked Cosign keyless OIDC
+          - Generated SPDX SBOM (`sbom-crds-${{ github.ref_name }}.spdx.json`)
+          - Signed every artifact with Cosign keyless into a verifiable Sigstore bundle
           - Generated GitHub build-provenance attestations
-          - Published GitHub Release with archives, signatures, and release notes attached via `gh`
+          - Published the GitHub Release with artifacts, bundles, and notes via `gh`
 
           ## Attached Assets
-          - `crds-${{ github.ref_name }}.tar.gz` (+ `.sig`)
-          - `sbom-crds-${{ github.ref_name }}.spdx.json` (+ `.sig`)
+          - `crds-${{ github.ref_name }}.tar.gz` (+ `.sigstore.json`)
+          - `sbom-crds-${{ github.ref_name }}.spdx.json` (+ `.sigstore.json`)
           - `RELEASE_NOTES.md`
 
           ## Verification Commands
-          - **Sig Verification:** 
-            `cosign verify-blob --certificate-identity-regexp ".*" --cert-oidc-issuer "https://token.actions.githubusercontent.com" --signature crds-${{ github.ref_name }}.tar.gz.sig crds-${{ github.ref_name }}.tar.gz`
-          - **Attestation Verification:** 
+          - **Signature:**
+            `cosign verify-blob --certificate-identity-regexp ".*" --certificate-oidc-issuer "https://token.actions.githubusercontent.com" --bundle crds-${{ github.ref_name }}.tar.gz.sigstore.json crds-${{ github.ref_name }}.tar.gz`
+          - **Provenance:**
             `gh attest verify crds-${{ github.ref_name }}.tar.gz --owner ${{ github.repository_owner }}`
           EOF
 
