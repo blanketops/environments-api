@@ -48,15 +48,25 @@ jobs:
           mage manifests
           tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
 
-      - name: Generate SBOM (Software Bill of Materials)
-        uses: anchore/sbom-action@v0.24.3
+      - name: Generate SPDX SBOM
+        run: |
+          VERSION=${{ steps.version.outputs.tag }}
+          syft dir:. -o spdx-json="sbom-${VERSION}.spdx.json"
+
+      - name: Sign artifacts with Cosign (keyless OIDC)
+        run: |
+          VERSION=${{ steps.version.outputs.tag }}
+          for f in "godoc-${VERSION}.tar.gz" "coverage-${VERSION}.tar.gz" "sbom-${VERSION}.spdx.json"; do
+            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+          done
+
+      - name: Attest SLSA build provenance
+        uses: actions/attest-build-provenance@v4
         with:
-          artifact-name: sbom-crds-${{ github.ref_name }}
-          output-file: sbom-crds-${{ github.ref_name }}.spdx.json
-          path: .
-          format: spdx-json
-          upload-artifact: false       # Bypasses internal artifact storage quota limits
-          upload-release-assets: false # Handled directly by gh release create below
+          subject-path: |
+            godoc-${{ steps.version.outputs.tag }}.tar.gz
+            coverage-${{ steps.version.outputs.tag }}.tar.gz
+            sbom-${{ steps.version.outputs.tag }}.spdx.json
 
       - name: Sign Artifacts with Cosign (Keyless - using runner binary)
         run: |
