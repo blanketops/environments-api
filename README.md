@@ -29,9 +29,9 @@ until stabilized.
 
 This repository follows **semantic versioning at the contract level**.
 
-- `v1alpha1` — experimental, breaking changes allowed
-- `v1beta1` — feature complete, limited breaking changes
-- `v1` — stable, backward-compatible
+- `v1alpha1` — experimental, breaking changes allowed.
+- `v1beta1` — feature complete, limited breaking changes.
+- `v1` — stable, backward-compatible.
 
 Once an API version is stabilized, it is **append-only**.
 
