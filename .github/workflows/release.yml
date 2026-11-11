@@ -50,7 +50,16 @@ jobs:
           tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
 
       - name: Generate SPDX SBOM
-        run: syft dir:. -o spdx-json="sbom-crds-${{ github.ref_name }}.spdx.json"
+        run: |
+          VERSION=${{ steps.version.outputs.tag }}
+          syft dir:. -o spdx-json="sbom-${VERSION}.spdx.json"
+
+      - name: Sign artifacts with Cosign (keyless OIDC)
+        run: |
+          VERSION=${{ steps.version.outputs.tag }}
+          for f in "godoc-${VERSION}.tar.gz" "coverage-${VERSION}.tar.gz" "sbom-${VERSION}.spdx.json"; do
+            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+          done
 
       - name: Sign artifacts with Cosign (keyless OIDC)
         run: |
