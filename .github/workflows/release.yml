@@ -68,15 +68,15 @@ jobs:
             coverage-${{ steps.version.outputs.tag }}.tar.gz
             sbom-${{ steps.version.outputs.tag }}.spdx.json
 
-      - name: Sign Artifacts with Cosign (Keyless - using runner binary)
-        run: |
-          cosign sign-blob --yes \
-            --output-signature crds-${{ github.ref_name }}.tar.gz.sig \
-            crds-${{ github.ref_name }}.tar.gz
+      # - name: Sign Artifacts with Cosign (Keyless - using runner binary)
+      #   run: |
+      #     cosign sign-blob --yes \
+      #       --output-signature crds-${{ github.ref_name }}.tar.gz.sig \
+      #       crds-${{ github.ref_name }}.tar.gz
 
-          cosign sign-blob --yes \
-            --output-signature sbom-crds-${{ github.ref_name }}.spdx.json.sig \
-            sbom-crds-${{ github.ref_name }}.spdx.json
+      #     cosign sign-blob --yes \
+      #       --output-signature sbom-crds-${{ github.ref_name }}.spdx.json.sig \
+      #       sbom-crds-${{ github.ref_name }}.spdx.json
 
       - name: Generate GitHub Native Artifact Attestation
         uses: actions/attest-build-provenance@v4
