@@ -53,12 +53,12 @@ jobs:
           VERSION=${{ steps.version.outputs.tag }}
           syft dir:. -o spdx-json="sbom-${VERSION}.spdx.json"
 
-      # - name: Sign artifacts with Cosign (keyless OIDC)
-      #   run: |
-      #     VERSION=${{ steps.version.outputs.tag }}
-      #     for f in "godoc-${VERSION}.tar.gz" "coverage-${VERSION}.tar.gz" "sbom-${VERSION}.spdx.json"; do
-      #       cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
-      #     done
+      - name: Sign artifacts with Cosign (keyless OIDC)
+        run: |
+          VERSION=${{ steps.version.outputs.tag }}
+          for f in "godoc-${VERSION}.tar.gz" "coverage-${VERSION}.tar.gz" "sbom-${VERSION}.spdx.json"; do
+            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+          done
 
       - name: Attest SLSA build provenance
         uses: actions/attest-build-provenance@v4
