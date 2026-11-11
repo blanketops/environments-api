@@ -32,8 +32,6 @@ on:
       - main
   workflow_dispatch: {}
 
-# One docs run at a time: a second one waits instead of racing the first to
-# open a pull request on the same main.
 concurrency:
   group: code-docs
   cancel-in-progress: false
@@ -78,11 +76,6 @@ jobs:
             ./api/... \
             ./pkg/...
 
-      # Through a pull request: main's `protect` ruleset takes changes only
-      # through a pull request with verified commits, and the App is not a
-      # bypass actor. hack/api-pr.sh opens one with a commit GitHub signs and
-      # squash-merges it; "[skip ci]" keeps that from starting workflows,
-      # including this one.
       - name: Commit docs
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
