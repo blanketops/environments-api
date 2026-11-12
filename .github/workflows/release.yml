@@ -54,25 +54,25 @@ jobs:
           VERSION=${{ steps.version.outputs.tag }}
           syft dir:. -o spdx-json="sbom-${VERSION}.spdx.json"
 
-      - name: Sign artifacts with Cosign (keyless OIDC)
-        run: |
-          VERSION=${{ steps.version.outputs.tag }}
-          for f in "godoc-${VERSION}.tar.gz" "coverage-${VERSION}.tar.gz" "sbom-${VERSION}.spdx.json"; do
-            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
-          done
+      # - name: Sign artifacts with Cosign (keyless OIDC)
+      #   run: |
+      #     VERSION=${{ steps.version.outputs.tag }}
+      #     for f in "godoc-${VERSION}.tar.gz" "coverage-${VERSION}.tar.gz" "sbom-${VERSION}.spdx.json"; do
+      #       cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+      #     done
 
-      - name: Sign artifacts with Cosign (keyless OIDC)
-        run: |
-          for f in "crds-${{ github.ref_name }}.tar.gz" "sbom-crds-${{ github.ref_name }}.spdx.json"; do
-            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
-          done
+      # - name: Sign artifacts with Cosign (keyless OIDC)
+      #   run: |
+      #     for f in "crds-${{ github.ref_name }}.tar.gz" "sbom-crds-${{ github.ref_name }}.spdx.json"; do
+      #       cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+      #     done
 
-      - name: Attest SLSA build provenance
-        uses: actions/attest-build-provenance@v4
-        with:
-          subject-path: |
-            crds-${{ github.ref_name }}.tar.gz
-            sbom-crds-${{ github.ref_name }}.spdx.json
+      # - name: Attest SLSA build provenance
+      #   uses: actions/attest-build-provenance@v4
+      #   with:
+      #     subject-path: |
+      #       crds-${{ github.ref_name }}.tar.gz
+      #       sbom-crds-${{ github.ref_name }}.spdx.json
 
       - name: Generate release notes
         run: git-cliff --config .cliff.toml --latest --output RELEASE_NOTES.md
