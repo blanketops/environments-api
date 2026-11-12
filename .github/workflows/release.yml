@@ -77,18 +77,18 @@ jobs:
       - name: Generate release notes
         run: git-cliff --config .cliff.toml --latest --output RELEASE_NOTES.md
 
-      - name: Create GitHub Release & Attach Assets via GitHub CLI (`gh`)
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          gh release create "${{ github.ref_name }}" \
-            --title "${{ github.ref_name }}" \
-            --notes-file RELEASE_NOTES.md \
-            crds-${{ github.ref_name }}.tar.gz \
-            crds-${{ github.ref_name }}.tar.gz.sigstore.json \
-            sbom-crds-${{ github.ref_name }}.spdx.json \
-            sbom-crds-${{ github.ref_name }}.spdx.json.sigstore.json \
-            RELEASE_NOTES.md
+      # - name: Create GitHub Release & Attach Assets via GitHub CLI (`gh`)
+      #   env:
+      #     GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      #   run: |
+      #     gh release create "${{ github.ref_name }}" \
+      #       --title "${{ github.ref_name }}" \
+      #       --notes-file RELEASE_NOTES.md \
+      #       crds-${{ github.ref_name }}.tar.gz \
+      #       crds-${{ github.ref_name }}.tar.gz.sigstore.json \
+      #       sbom-crds-${{ github.ref_name }}.spdx.json \
+      #       sbom-crds-${{ github.ref_name }}.spdx.json.sigstore.json \
+      #       RELEASE_NOTES.md
 
       - name: Release Summary
         run: |
