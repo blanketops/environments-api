@@ -1,8 +1,22 @@
+## [0.4.2] - 2026-11-12
+
+### 🐛 Bug Fixes
+
+- *(release)* Coherent CRD signing, drop environments copy-paste leftovers
+
+### ⚙️ Miscellaneous Tasks
+
+- Sync develop with main after release/v0.4.1
+
+### 💼 Other
+
+- Merge release/v0.4.2 into main
 ## [0.4.1] - 2026-11-11
 
 ### ⚙️ Miscellaneous Tasks
 
 - Sync develop with main after release/v0.4.0
+- *(release)* Update changelog for v0.4.1 (#233)
 
 ### 💼 Other
 
