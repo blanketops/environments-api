@@ -9,9 +9,11 @@
 # install's protect ruleset accepts it with no bypass. It is idempotent: when
 # install already matches, it opens nothing.
 #
-# Triggers: a published release of this repo (syncs that tag), or manual
-# dispatch (syncs the dispatched ref; dry-run, on by default, reports what
-# would change without writing).
+# Triggers: a v* tag push (syncs that release; finalize-release creates the tag
+# with an App token, so the push starts workflows), or manual dispatch (syncs
+# the dispatched ref; dry-run, on by default, reports what would change
+# without writing). Not `release: published`: this repo's release.yml does not
+# create a GitHub release.
 #
 # Secrets/variables: ADMIN_APP_PRIVATE_KEY (secret) and ADMIN_CLIENT_ID
 # (variable) of the Admin App, which needs Contents and Pull requests: write
@@ -20,8 +22,9 @@
 # =============================================================================
 name: Sync CRDs into environments-install
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
       dry-run:
@@ -58,7 +61,7 @@ jobs:
         with:
           source-dir: config/crd/bases
           dest-path: config/crd/bases
-          label: "CRDs from environments-api ${{ github.event.release.tag_name || github.ref_name }}"
+          label: "CRDs from environments-api ${{ github.ref_name }}"
           dry-run: ${{ inputs.dry-run && 'true' || 'false' }}
           client-id: ${{ vars.ADMIN_CLIENT_ID }}
           private-key: ${{ secrets.ADMIN_APP_PRIVATE_KEY }}
