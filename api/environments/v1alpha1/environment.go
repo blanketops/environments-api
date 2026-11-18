@@ -85,7 +85,6 @@ type EnvironmentStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The aggregate health phase of the delivery chain"
 // +kubebuilder:printcolumn:name="Application",type="string",JSONPath=".spec.contract.applicationName",description="The human-readable application identifier"
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.contract.environmentType",description="Classification of the environment (e.g., Staging, Production)"
