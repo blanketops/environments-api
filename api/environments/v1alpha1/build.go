@@ -85,7 +85,6 @@ type BuildStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="Current lifecycle phase of the build"
 // +kubebuilder:printcolumn:name="Strategy",type="string",JSONPath=".spec.contract.strategy.name",description="Shipwright strategy used"
 // +kubebuilder:printcolumn:name="Target-Image",type="string",JSONPath=".spec.contract.image",description="Target repository and tag"

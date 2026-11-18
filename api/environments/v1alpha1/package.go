@@ -85,7 +85,6 @@ type PackageStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The current reconciliation phase of the package"
 // +kubebuilder:printcolumn:name="Package-Name",type="string",JSONPath=".spec.contract.name",description="The logical name of the packaged application"
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.contract.version",description="The version identifier of the package contents"

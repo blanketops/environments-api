@@ -86,7 +86,6 @@ type DeploymentStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The execution phase of the overall rollout"
 // +kubebuilder:printcolumn:name="Runtime",type="string",JSONPath=".status.contract.runtime",description="The backend workload runtime being used"
 // +kubebuilder:printcolumn:name="Strategy",type="string",JSONPath=".status.contract.strategy",description="Workload deployment strategy"
