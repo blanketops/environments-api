@@ -85,7 +85,6 @@ type GitHubEventStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // +kubebuilder:printcolumn:name="Event-Type",type="string",JSONPath=".spec.contract.eventType",description="The provider event action (e.g., PUSH, PULL_REQUEST)"
 // +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.contract.repository",description="The source repository origin owner/name"
 // +kubebuilder:printcolumn:name="Accepted",type="boolean",JSONPath=".status.contract.accepted",description="True if webhook signature validation passed"

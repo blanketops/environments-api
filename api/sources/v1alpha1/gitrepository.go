@@ -83,7 +83,6 @@ type GitRepositoryStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // +kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.contract.ready",description="True if provider webhooks are registered and active"
 // +kubebuilder:printcolumn:name="Provider",type="string",JSONPath=".spec.contract.provider",description="The code hosting platform (e.g., GITHUB, GITLAB)"
 // +kubebuilder:printcolumn:name="Repository",type="string",JSONPath=".spec.contract.repository.name",description="The target repository identifier"

@@ -49,7 +49,38 @@ func Manifests() error {
 		fail("Manifests failed")
 		return err
 	}
+	if err := checkStatusSubresource("config/crd/bases"); err != nil {
+		fail("Manifests failed")
+		return err
+	}
 	success("Manifests complete")
+	return nil
+}
+
+// checkStatusSubresource fails when a generated CRD has no status
+// subresource. Every Kind's controller writes status through it, so a CRD
+// without it 404s every status update. controller-gen only reads type
+// markers from the type's doc comment and the comment block right above
+// it, so a +kubebuilder:subresource:status separated from the type by
+// another marker block (printcolumns) is silently dropped.
+func checkStatusSubresource(dir string) error {
+	files, err := filepath.Glob(filepath.Join(dir, "*.yaml"))
+	if err != nil {
+		return err
+	}
+	var missing []string
+	for _, f := range files {
+		b, err := os.ReadFile(f)
+		if err != nil {
+			return err
+		}
+		if !strings.Contains(string(b), "\n      status: {}\n") {
+			missing = append(missing, filepath.Base(f))
+		}
+	}
+	if len(missing) > 0 {
+		return fmt.Errorf("CRDs without a status subresource (keep +kubebuilder:subresource:status in the type's marker block): %s", strings.Join(missing, ", "))
+	}
 	return nil
 }
 

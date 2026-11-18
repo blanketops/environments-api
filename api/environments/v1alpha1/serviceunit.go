@@ -85,7 +85,6 @@ type ServiceUnitStatus struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.contract.phase",description="The current deployment phase of the workload"
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.contract.type",description="The image sourcing strategy (STATIC or BUILD)"
 // +kubebuilder:printcolumn:name="Replicas",type="integer",JSONPath=".spec.contract.size",description="The desired target replica count"
