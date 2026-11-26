@@ -11,7 +11,7 @@ name: Release
 on:
   push:
     tags:
-    - "v*"
+      - "v*"
 
 permissions:
   contents: write
@@ -21,100 +21,96 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-    - name: Generate GitHub App token
-      id: app-token
-      uses: actions/create-github-app-token@v3
-      with:
-        client-id: ${{ vars.APP_CLIENT_ID }}
-        private-key: ${{ secrets.APP_ID_PRIVATE_KEY }}
-        owner: blanketops
-        repositories: environments-api
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_ID_PRIVATE_KEY }}
+          owner: blanketops
+          repositories: environments-api
 
-    - name: Checkout
-      uses: actions/checkout@v7
-      with:
-        token: ${{ steps.app-token.outputs.token }}
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
 
-    - name: Install cosign
-      uses: sigstore/cosign-installer@v3.7.0
-    - name: Install syft
-      uses: anchore/sbom-action/download-syft@v0
-    - name: Set up Go
-      uses: actions/setup-go@v7
-      with:
-        go-version-file: go.mod
-        cache: false
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: false
 
-    - name: Generate & package CRDs
-      run: |
-        mage manifests
-        tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
+      - name: Generate & package CRDs
+        run: |
+          mage manifests
+          tar -czf "crds-${{ github.ref_name }}.tar.gz" -C config/crd/bases .
 
-    - name: Generate SPDX SBOM
-      run: syft dir:. -o spdx-json="sbom-crds-${{ github.ref_name }}.spdx.json"
+      - name: Generate SPDX SBOM
+        run: syft dir:. -o spdx-json="sbom-crds-${{ github.ref_name }}.spdx.json"
 
-    - name: Sign artifacts with Cosign (keyless OIDC)
-      run: |
-        for f in "crds-${{ github.ref_name }}.tar.gz" "sbom-crds-${{ github.ref_name }}.spdx.json"; do
-          cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
-        done
+      - name: Sign artifacts with Cosign (keyless OIDC)
+        run: |
+          for f in "crds-${{ github.ref_name }}.tar.gz" "sbom-crds-${{ github.ref_name }}.spdx.json"; do
+            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+          done
 
-    - name: Attest SLSA build provenance
-      uses: actions/attest-build-provenance@v4
-      with:
-        subject-path: |
-          crds-${{ github.ref_name }}.tar.gz
-          sbom-crds-${{ github.ref_name }}.spdx.json
+      - name: Attest SLSA build provenance
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: |
+            crds-${{ github.ref_name }}.tar.gz
+            sbom-crds-${{ github.ref_name }}.spdx.json
 
-    - name: Generate release notes
-      run: git-cliff --config .cliff.toml --latest --output RELEASE_NOTES.md
+      - name: Generate release notes
+        run: git-cliff --config .cliff.toml --latest --output RELEASE_NOTES.md
 
-    - name: Create GitHub Release & Attach Assets via GitHub CLI (`gh`)
-      env:
-        GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      run: |
-        gh release create "${{ github.ref_name }}" \
-          --title "${{ github.ref_name }}" \
-          --notes-file RELEASE_NOTES.md \
-          crds-${{ github.ref_name }}.tar.gz \
-          crds-${{ github.ref_name }}.tar.gz.sigstore.json \
-          sbom-crds-${{ github.ref_name }}.spdx.json \
-          sbom-crds-${{ github.ref_name }}.spdx.json.sigstore.json \
-          RELEASE_NOTES.md
+      - name: Create GitHub Release & Attach Assets via GitHub CLI (`gh`)
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --notes-file RELEASE_NOTES.md \
+            crds-${{ github.ref_name }}.tar.gz \
+            crds-${{ github.ref_name }}.tar.gz.sigstore.json \
+            sbom-crds-${{ github.ref_name }}.spdx.json \
+            sbom-crds-${{ github.ref_name }}.spdx.json.sigstore.json \
+            RELEASE_NOTES.md
 
-    - name: Release Summary
-      run: |
-        cat >> $GITHUB_STEP_SUMMARY << 'EOF'
-        # 📦 Secure CRD Release Published: ${{ github.ref_name }}
+      - name: Release Summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          # 📦 Secure CRD Release Published: ${{ github.ref_name }}
 
-        ## Completed
-        - Generated CRD manifests via `mage manifests`
-        - Packaged CRDs into `crds-${{ github.ref_name }}.tar.gz`
-        - Generated SPDX SBOM (`sbom-crds-${{ github.ref_name }}.spdx.json`)
-        - Signed every artifact with Cosign keyless into a verifiable Sigstore bundle
-        - Generated GitHub build-provenance attestations
-        - Published the GitHub Release with artifacts, bundles, and notes via `gh`
+          ## Completed
+          - Generated CRD manifests via `mage manifests`
+          - Packaged CRDs into `crds-${{ github.ref_name }}.tar.gz`
+          - Generated SPDX SBOM (`sbom-crds-${{ github.ref_name }}.spdx.json`)
+          - Signed every artifact with Cosign keyless into a verifiable Sigstore bundle
+          - Generated GitHub build-provenance attestations
+          - Published the GitHub Release with artifacts, bundles, and notes via `gh`
 
-        ## Attached Assets
-        - `crds-${{ github.ref_name }}.tar.gz` (+ `.sigstore.json`)
-        - `sbom-crds-${{ github.ref_name }}.spdx.json` (+ `.sigstore.json`)
-        - `RELEASE_NOTES.md`
+          ## Attached Assets
+          - `crds-${{ github.ref_name }}.tar.gz` (+ `.sigstore.json`)
+          - `sbom-crds-${{ github.ref_name }}.spdx.json` (+ `.sigstore.json`)
+          - `RELEASE_NOTES.md`
 
-        ## Verification Commands
-        - **Signature:**
-          `cosign verify-blob --certificate-identity-regexp ".*" --certificate-oidc-issuer "https://token.actions.githubusercontent.com" --bundle crds-${{ github.ref_name }}.tar.gz.sigstore.json crds-${{ github.ref_name }}.tar.gz`
-        - **Provenance:**
-          `gh attest verify crds-${{ github.ref_name }}.tar.gz --owner ${{ github.repository_owner }}`
-        EOF
+          ## Verification Commands
+          - **Signature:**
+            `cosign verify-blob --certificate-identity-regexp ".*" --certificate-oidc-issuer "https://token.actions.githubusercontent.com" --bundle crds-${{ github.ref_name }}.tar.gz.sigstore.json crds-${{ github.ref_name }}.tar.gz`
+          - **Provenance:**
+            `gh attest verify crds-${{ github.ref_name }}.tar.gz --owner ${{ github.repository_owner }}`
+          EOF
 
-    - name: Releaser complete
-      if: always()
-      uses: blanketops/environments-bots/.github/actions/releaser@v0.1.1
-      with:
-        command: complete
-        release: ${{ github.ref_name }}
-        app-id: ${{ vars.DEVELOPER_CLIENT_ID }}
-        private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
+      - name: Releaser complete
+        if: always()
+        uses: blanketops/environments-bots/.github/actions/releaser@v0.1.1
+        with:
+          command: complete
+          release: ${{ github.ref_name }}
+          app-id: ${{ vars.DEVELOPER_CLIENT_ID }}
+          private-key: ${{ secrets.DEVELOPER_APP_PRIVATE_KEY }}
